@@ -1,0 +1,158 @@
+<main class="page">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">DP</div>
+      <div>
+        <p class="brand-title">Diario de Pantalla</p>
+        <p class="brand-subtitle">Peliculas y series que dejan huella.</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="nav-pill active">Diario</button>
+      <button class="nav-pill">Estadisticas</button>
+      <button class="nav-pill">Listas</button>
+      <button class="nav-pill ghost">Exportar</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Nuevo registro</p>
+      <h1>Tu memoria audiovisual, ordenada por emociones.</h1>
+      <p class="lead">
+        Guarda lo que ves, como te hizo sentir y por que vale la pena recordarlo.
+        Un diario intimo para volver a tus escenas favoritas.
+      </p>
+      <div class="hero-actions">
+        <button class="primary">Agregar entrada</button>
+        <button class="secondary">Ver calendario</button>
+      </div>
+      <div class="quick-stats">
+        <div class="stat-card">
+          <p class="stat-value">{{ moviesCount }}</p>
+          <p class="stat-label">Peliculas vistas</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-value">{{ seriesCount }}</p>
+          <p class="stat-label">Series seguidas</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-value">{{ averageRating.toFixed(1) }}</p>
+          <p class="stat-label">Promedio personal</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <div class="panel-header">
+        <div>
+          <p class="panel-title">Entrada rapida</p>
+          <p class="panel-subtitle">Hoy, 01 Feb 2026</p>
+        </div>
+        <span class="panel-chip">Plantilla nocturna</span>
+      </div>
+      <div class="panel-body">
+        <div class="field">
+          <label>Titulo</label>
+          <input placeholder="Ej: The Holdovers" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Tipo</label>
+            <select>
+              <option>Pelicula</option>
+              <option>Serie</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Calificacion</label>
+            <input placeholder="0-5" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Nota rapida</label>
+          <textarea rows="3" placeholder="Que quieres recordar de esta experiencia"></textarea>
+        </div>
+        <button class="primary full">Guardar entrada</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="column">
+      <div class="section-header">
+        <h2>Ultimos registros</h2>
+        <button class="ghost">Ver todo</button>
+      </div>
+      <div class="entries">
+        @for (entry of entries; track entry.id) {
+          <article class="entry-card">
+            <div class="entry-header">
+              <div>
+                <p class="entry-title">{{ entry.title }}</p>
+                <p class="entry-meta">{{ entry.type }} · {{ entry.season ?? 'Unico' }} · {{ entry.date }}</p>
+              </div>
+              <div class="entry-rating">{{ entry.rating }}</div>
+            </div>
+            <p class="entry-notes">{{ entry.notes }}</p>
+            <div class="entry-tags">
+              @for (tag of entry.tags; track tag) {
+                <span>{{ tag }}</span>
+              }
+            </div>
+            <div class="entry-footer">
+              <span class="mood">{{ entry.mood }}</span>
+              <button class="ghost">Editar</button>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+
+    <aside class="column side">
+      <div class="section-header">
+        <h2>Resumen del mes</h2>
+        <button class="ghost">Cambiar mes</button>
+      </div>
+      <div class="highlights">
+        @for (item of highlights; track item.label) {
+          <div class="highlight">
+            <p class="highlight-label">{{ item.label }}</p>
+            <p class="highlight-value">{{ item.value }}</p>
+            <p class="highlight-hint">{{ item.hint }}</p>
+          </div>
+        }
+      </div>
+      <div class="mood-board">
+        <p class="section-title">Mapa de emociones</p>
+        <div class="mood-grid">
+          <span>Intenso</span>
+          <span>Confort</span>
+          <span>Nostalgia</span>
+          <span>Energia</span>
+          <span>Asombro</span>
+          <span>Catarsis</span>
+        </div>
+      </div>
+      <div class="list-card">
+        <p class="section-title">Lista pendiente</p>
+        <div class="list-item">
+          <div>
+            <p>Perfect Days</p>
+            <span>Drama · 1h 55m</span>
+          </div>
+          <button class="ghost">Agregar</button>
+        </div>
+        <div class="list-item">
+          <div>
+            <p>True Detective</p>
+            <span>Serie · Temp. 1</span>
+          </div>
+          <button class="ghost">Agregar</button>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<router-outlet />

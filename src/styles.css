@@ -1,0 +1,25 @@
+:root {
+  font-family: "Libre Franklin", sans-serif;
+  color: #11121a;
+  background-color: #f7f2ec;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #fef1d6 0%, rgba(254, 241, 214, 0) 55%),
+    radial-gradient(circle at 20% 20%, #e5f1ff 0%, rgba(229, 241, 255, 0) 60%),
+    radial-gradient(circle at 80% 10%, #efe5ff 0%, rgba(239, 229, 255, 0) 45%),
+    #f7f2ec;
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
