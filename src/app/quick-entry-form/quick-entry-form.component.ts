@@ -16,6 +16,8 @@ export class QuickEntryFormComponent {
   type: DiaryEntry['type'] = 'Pelicula';
   rating: string = '';
   notes: string = '';
+  mood: string = '';
+  tags: string = '';
 
   readonly todayLabel: string = new Intl.DateTimeFormat('es-ES', {
     day: '2-digit',
@@ -26,6 +28,11 @@ export class QuickEntryFormComponent {
   saveEntry(): void {
     const title = this.title.trim();
     const notes = this.notes.trim();
+    const mood = this.mood.trim();
+    const tags = this.tags
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
     const ratingValue = Number.parseFloat(this.rating);
     const safeRating = Number.isFinite(ratingValue)
       ? Math.min(Math.max(ratingValue, 0), 5)
@@ -42,8 +49,8 @@ export class QuickEntryFormComponent {
       type: this.type,
       date: today.toISOString().split('T')[0],
       rating: safeRating,
-      mood: 'Pendiente',
-      tags: ['Entrada rapida'],
+      mood: mood || 'Pendiente',
+      tags: tags.length > 0 ? tags : ['Entrada rapida'],
       notes: notes || 'Sin nota rapida.',
     };
 
@@ -52,5 +59,7 @@ export class QuickEntryFormComponent {
     this.type = 'Pelicula';
     this.rating = '';
     this.notes = '';
+    this.mood = '';
+    this.tags = '';
   }
 }

@@ -29,10 +29,20 @@
       <textarea
         name="notes"
         [(ngModel)]="notes"
-        rows="3"
+        rows="1"
         placeholder="Que quieres recordar de esta experiencia"
-        style="resize: none;"
+        style="resize: none"
       ></textarea>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Mood</label>
+        <input name="mood" [(ngModel)]="mood" placeholder="Ej: Nostalgica" />
+      </div>
+      <div class="field">
+        <label>Tags</label>
+        <input name="tags" [(ngModel)]="tags" placeholder="Ej: Intima, Emocional, Lenta" />
+      </div>
     </div>
     <button class="primary full" type="submit">Guardar entrada</button>
   </form>
