@@ -4,6 +4,7 @@ export interface DiaryEntry {
   id: number;
   title: string;
   type: 'Pelicula' | 'Serie' | 'Anime';
+  imdbId?: string;
   season?: string;
   date: string;
   rating: number;

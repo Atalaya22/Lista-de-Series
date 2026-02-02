@@ -24,11 +24,40 @@
         </div>
       </div>
     </div>
+
     <app-quick-entry-form (entrySaved)="addEntry($event)"></app-quick-entry-form>
   </section>
 
   <section class="grid">
     <div class="column">
+      <section class="latest-movie-card">
+        <div class="latest-movie-text">
+          <p class="eyebrow">Ultima pelicula vista</p>
+          @if (latestMovie) {
+            <h2 class="latest-movie-title">{{ latestMovie.title }}</h2>
+            <p class="latest-movie-meta">
+              Vista el {{ formatEntryDate(latestMovie.date) }} · {{ latestMovie.rating }} / 5
+            </p>
+            <p class="latest-movie-note">{{ latestMovie.notes }}</p>
+          } @else {
+            <h2 class="latest-movie-title">Aun no hay peliculas</h2>
+            <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
+          }
+        </div>
+        <div class="latest-movie-poster">
+          @if (latestMoviePosterState === 'loading') {
+            <div class="poster-placeholder">Cargando caratula...</div>
+          } @else if (latestMoviePosterState === 'error') {
+            <div class="poster-placeholder">
+              {{ latestMoviePosterMessage || 'No se pudo cargar la caratula.' }}
+            </div>
+          } @else if (latestMoviePosterUrl) {
+            <img [src]="latestMoviePosterUrl" [alt]="latestMoviePosterAlt" loading="lazy" />
+          } @else {
+            <div class="poster-placeholder">Sin caratula.</div>
+          }
+        </div>
+      </section>
       <app-entries [entries]="entries"></app-entries>
     </div>
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { EntriesComponent } from './entries/entries.component';
 import { HighlightsComponent } from './highlights/highlights.component';
@@ -30,12 +30,13 @@ interface Highlight {
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit {
   entries: DiaryEntry[] = [
     {
       id: 1,
       title: 'Aftersun',
       type: 'Pelicula',
+      imdbId: 'tt19770238',
       date: '2026-01-30',
       rating: 4.8,
       mood: 'Agridulce',
@@ -57,6 +58,7 @@ export class App {
       id: 3,
       title: 'Past Lives',
       type: 'Pelicula',
+      imdbId: 'tt13238346',
       date: '2026-01-25',
       rating: 4.4,
       mood: 'Nostalgica',
@@ -118,6 +120,17 @@ export class App {
     },
   ];
 
+  latestMovie: DiaryEntry | null = null;
+  latestMoviePosterUrl: string | null = null;
+  latestMoviePosterAlt: string = '';
+  latestMoviePosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
+  latestMoviePosterMessage: string = '';
+  private posterController?: AbortController;
+
+  ngOnInit(): void {
+    this.refreshLatestMovie();
+  }
+
   get moviesCount(): number {
     return this.entries.filter((entry) => entry.type === 'Pelicula').length;
   }
@@ -133,5 +146,112 @@ export class App {
 
   addEntry(entry: DiaryEntry): void {
     this.entries = [entry, ...this.entries];
+    if (entry.type === 'Pelicula') {
+      this.refreshLatestMovie();
+    }
+  }
+
+  formatEntryDate(date: string): string {
+    return new Intl.DateTimeFormat('es-ES', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(date));
+  }
+
+  private refreshLatestMovie(): void {
+    this.latestMovie = this.getLatestMovie();
+    this.latestMoviePosterUrl = null;
+    this.latestMoviePosterAlt = '';
+    this.latestMoviePosterMessage = '';
+
+    if (!this.latestMovie) {
+      this.latestMoviePosterState = 'idle';
+      return;
+    }
+
+    this.fetchLatestMoviePoster(this.latestMovie);
+  }
+
+  private getLatestMovie(): DiaryEntry | null {
+    const movies = this.entries.filter((entry) => entry.type === 'Pelicula');
+    if (movies.length === 0) {
+      return null;
+    }
+
+    return movies.reduce((latest, entry) => {
+      return new Date(entry.date) > new Date(latest.date) ? entry : latest;
+    }, movies[0]);
+  }
+
+  private async fetchLatestMoviePoster(entry: DiaryEntry): Promise<void> {
+    if (!entry.imdbId) {
+      this.latestMoviePosterState = 'error';
+      this.latestMoviePosterMessage = 'Falta el ID de IMDb para esta entrada.';
+      return;
+    }
+
+    this.posterController?.abort();
+    this.posterController = new AbortController();
+    this.latestMoviePosterState = 'loading';
+
+    try {
+      const response = await fetch('https://graph.imdbapi.dev/v1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `{
+            title(id: "${entry.imdbId}") {
+              primary_title
+              posters {
+                url
+                width
+                height
+              }
+            }
+          }`,
+        }),
+        signal: this.posterController.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Respuesta no valida: ${response.status}`);
+      }
+
+      const payload = (await response.json()) as {
+        data?: {
+          title?: {
+            primary_title?: string;
+            posters?: Array<{ url?: string; width?: number; height?: number }>;
+          };
+        };
+        errors?: Array<{ message?: string }>;
+      };
+
+      if (payload.errors?.length) {
+        throw new Error(payload.errors[0]?.message ?? 'Error desconocido');
+      }
+
+      const posters = payload.data?.title?.posters ?? [];
+      const poster = posters
+        .filter((item) => item.url)
+        .sort((a, b) => (b.width ?? 0) * (b.height ?? 0) - (a.width ?? 0) * (a.height ?? 0))[0];
+
+      if (!poster?.url) {
+        throw new Error('No se encontro caratula.');
+      }
+
+      this.latestMoviePosterUrl = poster.url;
+      this.latestMoviePosterAlt = `Caratula de ${entry.title}`;
+      this.latestMoviePosterState = 'ready';
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+      this.latestMoviePosterState = 'error';
+      this.latestMoviePosterMessage = 'No se pudo cargar la caratula.';
+    }
   }
 }

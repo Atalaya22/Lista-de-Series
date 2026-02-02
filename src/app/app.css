@@ -119,6 +119,65 @@
   gap: 18px;
 }
 
+.latest-movie-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
+  gap: 16px;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(246, 241, 255, 0.85));
+  border: 1px solid rgba(17, 18, 26, 0.08);
+  box-shadow: 0 12px 24px rgba(17, 18, 26, 0.08);
+}
+
+.latest-movie-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.latest-movie-title {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.4rem;
+}
+
+.latest-movie-meta {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4c4f67;
+}
+
+.latest-movie-note {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #3f4158;
+}
+
+.latest-movie-poster {
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(17, 18, 26, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+
+.latest-movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.poster-placeholder {
+  color: #4c4f67;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 16px;
+}
+
 .side {
   position: relative;
 }
@@ -207,6 +266,10 @@
 
 @media (max-width: 900px) {
   .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .latest-movie-card {
     grid-template-columns: 1fr;
   }
 }
