@@ -1,0 +1,21 @@
+<article class="entry-card">
+  <div class="entry-header">
+    <div>
+      <p class="entry-title">{{ entry.title }}</p>
+      <p class="entry-meta">
+        {{ entry.type }} - {{ entry.season ?? 'Unico' }} - {{ entry.date }}
+      </p>
+    </div>
+    <div class="entry-rating">{{ entry.rating }}</div>
+  </div>
+  <p class="entry-notes">{{ entry.notes }}</p>
+  <div class="entry-tags">
+    @for (tag of entry.tags; track tag) {
+      <span>{{ tag }}</span>
+    }
+  </div>
+  <div class="entry-footer">
+    <span class="mood">{{ entry.mood }}</span>
+    <button class="ghost">Editar</button>
+  </div>
+</article>

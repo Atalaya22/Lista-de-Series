@@ -1,0 +1,39 @@
+<div class="hero-panel">
+  <div class="panel-header">
+    <div>
+      <p class="panel-title">Entrada rapida</p>
+      <p class="panel-subtitle">Hoy, {{ todayLabel }}</p>
+    </div>
+  </div>
+  <form class="panel-body" (ngSubmit)="saveEntry()">
+    <div class="field">
+      <label>Titulo</label>
+      <input name="title" [(ngModel)]="title" placeholder="Ej: The Holdovers" />
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Tipo</label>
+        <select name="type" [(ngModel)]="type">
+          <option value="Pelicula">Pelicula</option>
+          <option value="Serie">Serie</option>
+          <option value="Anime">Anime</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Calificacion</label>
+        <input name="rating" [(ngModel)]="rating" placeholder="0-5" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Nota rapida</label>
+      <textarea
+        name="notes"
+        [(ngModel)]="notes"
+        rows="3"
+        placeholder="Que quieres recordar de esta experiencia"
+        style="resize: none;"
+      ></textarea>
+    </div>
+    <button class="primary full" type="submit">Guardar entrada</button>
+  </form>
+</div>

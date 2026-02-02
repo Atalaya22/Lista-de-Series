@@ -1,0 +1,21 @@
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h2 {
+  font-family: "Space Grotesk", sans-serif;
+  margin: 0;
+}
+
+.ghost {
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  border: 1px solid rgba(17, 18, 26, 0.2);
+  background: transparent;
+  color: #11121a;
+  cursor: pointer;
+}

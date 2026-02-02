@@ -1,0 +1,6 @@
+<app-section-header title="Ultimos registros" actionLabel="Ver todo"></app-section-header>
+<div class="entries">
+  @for (entry of entries; track entry.id) {
+    <app-entry-card [entry]="entry"></app-entry-card>
+  }
+</div>

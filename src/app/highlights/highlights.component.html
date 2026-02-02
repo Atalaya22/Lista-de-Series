@@ -1,0 +1,9 @@
+<div class="highlights">
+  @for (item of items; track item.label) {
+    <div class="highlight">
+      <p class="highlight-label">{{ item.label }}</p>
+      <p class="highlight-value">{{ item.value }}</p>
+      <p class="highlight-hint">{{ item.hint }}</p>
+    </div>
+  }
+</div>

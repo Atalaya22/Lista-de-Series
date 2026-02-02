@@ -1,0 +1,12 @@
+<div class="list-card">
+  <p class="section-title">{{ title }}</p>
+  @for (item of items; track item.title) {
+    <div class="list-item">
+      <div>
+        <p>{{ item.title }}</p>
+        <span>{{ item.meta }}</span>
+      </div>
+      <button class="ghost">{{ item.actionLabel }}</button>
+    </div>
+  }
+</div>

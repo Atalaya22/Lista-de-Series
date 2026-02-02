@@ -1,0 +1,69 @@
+.entry-card {
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 20px;
+  padding: 18px;
+  border: 1px solid rgba(17, 18, 26, 0.08);
+  box-shadow: 0 16px 30px rgba(17, 18, 26, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fade-up 0.6s ease both;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+}
+
+.entry-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.entry-meta {
+  margin: 6px 0 0;
+  color: #4c4f67;
+  font-size: 0.9rem;
+}
+
+.entry-rating {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+  background: #11121a;
+  color: #fdf7f2;
+  padding: 6px 12px;
+  border-radius: 12px;
+}
+
+.entry-notes {
+  margin: 0;
+  color: #2f3142;
+}
+
+.entry-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.entry-tags span {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(123, 79, 255, 0.12);
+  color: #5d35e0;
+  font-size: 0.8rem;
+}
+
+.entry-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mood {
+  font-weight: 600;
+  color: #7b4fff;
+}

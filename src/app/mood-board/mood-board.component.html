@@ -1,0 +1,8 @@
+<div class="mood-board">
+  <p class="section-title">{{ title }}</p>
+  <div class="mood-grid">
+    @for (mood of moods; track mood) {
+      <span>{{ mood }}</span>
+    }
+  </div>
+</div>

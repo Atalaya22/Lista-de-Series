@@ -1,17 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-interface DiaryEntry {
-  id: number;
-  title: string;
-  type: 'Pelicula' | 'Serie';
-  season?: string;
-  date: string;
-  rating: number;
-  mood: string;
-  tags: string[];
-  notes: string;
-}
+import { EntriesComponent } from './entries/entries.component';
+import { HighlightsComponent } from './highlights/highlights.component';
+import { MoodBoardComponent } from './mood-board/mood-board.component';
+import { PendingListComponent, PendingListItem } from './pending-list/pending-list.component';
+import { SectionHeaderComponent } from './section-header/section-header.component';
+import { DiaryEntry } from './entries/entry-card/entry-card.component';
+import { QuickEntryFormComponent } from './quick-entry-form/quick-entry-form.component';
+import { TopbarComponent } from './topbar/topbar.component';
 
 interface Highlight {
   label: string;
@@ -21,12 +17,21 @@ interface Highlight {
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    EntriesComponent,
+    PendingListComponent,
+    SectionHeaderComponent,
+    HighlightsComponent,
+    MoodBoardComponent,
+    QuickEntryFormComponent,
+    TopbarComponent,
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-  readonly entries: DiaryEntry[] = [
+  entries: DiaryEntry[] = [
     {
       id: 1,
       title: 'Aftersun',
@@ -35,7 +40,7 @@ export class App {
       rating: 4.8,
       mood: 'Agridulce',
       tags: ['Intima', 'Emocional', 'Lenta'],
-      notes: 'Planos largos y silencios que se sienten como recuerdos.'
+      notes: 'Planos largos y silencios que se sienten como recuerdos.',
     },
     {
       id: 2,
@@ -46,7 +51,7 @@ export class App {
       rating: 4.6,
       mood: 'Catartica',
       tags: ['Cocina', 'Ansiedad', 'Familia'],
-      notes: 'Un caos hermoso. Episodio 6 me dejo sin aire.'
+      notes: 'Un caos hermoso. Episodio 6 me dejo sin aire.',
     },
     {
       id: 3,
@@ -56,7 +61,7 @@ export class App {
       rating: 4.4,
       mood: 'Nostalgica',
       tags: ['Romance', 'Destino'],
-      notes: 'Pequenos gestos. Conversaciones que se quedan.'
+      notes: 'Pequenos gestos. Conversaciones que se quedan.',
     },
     {
       id: 4,
@@ -67,26 +72,50 @@ export class App {
       rating: 4.7,
       mood: 'Intriga',
       tags: ['Sci-fi', 'Corporativo', 'Distopia'],
-      notes: 'Estetica impecable. Final perfecto para debatir.'
-    }
+      notes: 'Estetica impecable. Final perfecto para debatir.',
+    },
   ];
 
   readonly highlights: Highlight[] = [
     {
       label: 'Tiempo total',
       value: '24h 35m',
-      hint: 'Estimado en enero'
+      hint: 'Estimado en enero',
     },
     {
       label: 'Estado de animo',
       value: 'Melancolico',
-      hint: 'Tema dominante'
+      hint: 'Tema dominante',
     },
     {
       label: 'Lugar favorito',
       value: 'Sala / noche',
-      hint: '62% de tus entradas'
-    }
+      hint: '62% de tus entradas',
+    },
+  ];
+
+  readonly moodBoard: string[] = [
+    'Intenso',
+    'Confort',
+    'Nostalgia',
+    'Energia',
+    'Asombro',
+    'Catarsis',
+  ];
+
+  readonly Pendientes: string = 'Pendientes';
+
+  readonly items: PendingListItem[] = [
+    {
+      title: 'Perfect Days',
+      meta: 'Drama • 1h 55m',
+      actionLabel: 'Agregar',
+    },
+    {
+      title: 'True Detective',
+      meta: 'Serie • Temp. 1',
+      actionLabel: 'Agregar',
+    },
   ];
 
   get moviesCount(): number {
@@ -100,5 +129,9 @@ export class App {
   get averageRating(): number {
     const total = this.entries.reduce((sum, entry) => sum + entry.rating, 0);
     return total / this.entries.length;
+  }
+
+  addEntry(entry: DiaryEntry): void {
+    this.entries = [entry, ...this.entries];
   }
 }

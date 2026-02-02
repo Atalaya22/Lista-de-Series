@@ -1,0 +1,31 @@
+.highlights {
+  display: grid;
+  gap: 14px;
+}
+
+.highlight {
+  background: #11121a;
+  color: #fdf7f2;
+  padding: 18px;
+  border-radius: 18px;
+}
+
+.highlight-label {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.highlight-value {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.4rem;
+  margin: 8px 0 4px;
+}
+
+.highlight-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
