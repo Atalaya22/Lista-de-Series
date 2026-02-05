@@ -105,7 +105,7 @@ export class App implements OnInit {
 
   readonly Pendientes: string = 'Pendientes';
 
-  readonly items: PendingListItem[] = [
+  pendingItems: PendingListItem[] = [
     {
       title: 'Perfect Days',
       meta: 'Drama • 1h 55m',
@@ -166,6 +166,10 @@ export class App implements OnInit {
     } else if (entry.type === 'Anime') {
       this.refreshLatestAnime();
     }
+  }
+
+  addPendingItem(item: PendingListItem): void {
+    this.pendingItems = [item, ...this.pendingItems];
   }
 
   formatEntryDate(date: string): string {

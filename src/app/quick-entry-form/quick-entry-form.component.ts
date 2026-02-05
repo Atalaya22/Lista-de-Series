@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DiaryEntry } from '../entries/entry-card/entry-card.component';
+import { PendingListItem } from '../pending-list/pending-list.component';
 
 @Component({
   selector: 'app-quick-entry-form',
@@ -11,6 +12,7 @@ import { DiaryEntry } from '../entries/entry-card/entry-card.component';
 })
 export class QuickEntryFormComponent {
   @Output() entrySaved = new EventEmitter<DiaryEntry>();
+  @Output() pendingSaved = new EventEmitter<PendingListItem>();
 
   title: string = '';
   type: DiaryEntry['type'] = 'Pelicula';
@@ -18,6 +20,7 @@ export class QuickEntryFormComponent {
   notes: string = '';
   mood: string = '';
   tags: string = '';
+  isPending: boolean = false;
 
   readonly todayLabel: string = new Intl.DateTimeFormat('es-ES', {
     day: '2-digit',
@@ -42,6 +45,18 @@ export class QuickEntryFormComponent {
       return;
     }
 
+    if (this.isPending) {
+      const meta = notes ? `${this.type} • ${notes}` : `${this.type} • Pendiente`;
+      const pendingItem: PendingListItem = {
+        title,
+        meta,
+        actionLabel: 'Agregar',
+      };
+      this.pendingSaved.emit(pendingItem);
+      this.resetForm();
+      return;
+    }
+
     const today = new Date();
     const entry: DiaryEntry = {
       id: today.getTime(),
@@ -55,11 +70,16 @@ export class QuickEntryFormComponent {
     };
 
     this.entrySaved.emit(entry);
+    this.resetForm();
+  }
+
+  private resetForm(): void {
     this.title = '';
     this.type = 'Pelicula';
     this.rating = '';
     this.notes = '';
     this.mood = '';
     this.tags = '';
+    this.isPending = false;
   }
 }

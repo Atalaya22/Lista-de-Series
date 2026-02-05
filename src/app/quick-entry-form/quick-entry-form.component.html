@@ -44,6 +44,10 @@
         <input name="tags" [(ngModel)]="tags" placeholder="Ej: Intima, Emocional, Lenta" />
       </div>
     </div>
+    <label class="toggle">
+      <input type="checkbox" name="isPending" [(ngModel)]="isPending" />
+      Marcar como pendiente
+    </label>
     <button class="primary full" type="submit">Guardar entrada</button>
   </form>
 </div>

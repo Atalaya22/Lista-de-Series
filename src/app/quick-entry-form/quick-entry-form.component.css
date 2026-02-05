@@ -69,6 +69,18 @@
   gap: 12px;
 }
 
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.toggle input {
+  accent-color: #fdf7f2;
+}
+
 .full {
   width: 100%;
 }

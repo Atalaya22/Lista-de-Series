@@ -25,7 +25,10 @@
       </div>
     </div>
 
-    <app-quick-entry-form (entrySaved)="addEntry($event)"></app-quick-entry-form>
+    <app-quick-entry-form
+      (entrySaved)="addEntry($event)"
+      (pendingSaved)="addPendingItem($event)"
+    ></app-quick-entry-form>
   </section>
 
   <section class="grid">
@@ -133,7 +136,7 @@
       <app-highlights [items]="highlights"></app-highlights>
       <app-mood-board title="Mapa de emociones" [moods]="moodBoard"></app-mood-board>
 
-      <app-pending-list [title]="Pendientes" [items]="items"></app-pending-list>
+      <app-pending-list [title]="Pendientes" [items]="pendingItems"></app-pending-list>
     </aside>
   </section>
 </main>
