@@ -123,10 +123,25 @@ export class App implements OnInit {
   latestMoviePosterAlt: string = '';
   latestMoviePosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
   latestMoviePosterMessage: string = '';
-  private posterController?: AbortController;
+  latestSeries: DiaryEntry | null = null;
+  latestSeriesPosterUrl: string | null = null;
+  latestSeriesPosterAlt: string = '';
+  latestSeriesPosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
+  latestSeriesPosterMessage: string = '';
+  latestAnime: DiaryEntry | null = null;
+  latestAnimePosterUrl: string | null = null;
+  latestAnimePosterAlt: string = '';
+  latestAnimePosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
+  latestAnimePosterMessage: string = '';
+  private moviePosterController?: AbortController;
+  private seriesPosterController?: AbortController;
+  private animePosterController?: AbortController;
+  private posterCache = new Map<string, { url: string; alt: string }>();
 
   ngOnInit(): void {
     this.refreshLatestMovie();
+    this.refreshLatestSeries();
+    this.refreshLatestAnime();
   }
 
   get moviesCount(): number {
@@ -146,6 +161,10 @@ export class App implements OnInit {
     this.entries = [entry, ...this.entries];
     if (entry.type === 'Pelicula') {
       this.refreshLatestMovie();
+    } else if (entry.type === 'Serie') {
+      this.refreshLatestSeries();
+    } else if (entry.type === 'Anime') {
+      this.refreshLatestAnime();
     }
   }
 
@@ -171,73 +190,58 @@ export class App implements OnInit {
     this.fetchLatestMoviePoster(this.latestMovie);
   }
 
+  private refreshLatestSeries(): void {
+    this.latestSeries = this.getLatestEntryByType('Serie');
+    this.latestSeriesPosterUrl = null;
+    this.latestSeriesPosterAlt = '';
+    this.latestSeriesPosterMessage = '';
+
+    if (!this.latestSeries) {
+      this.latestSeriesPosterState = 'idle';
+      return;
+    }
+
+    this.fetchLatestSeriesPoster(this.latestSeries);
+  }
+
+  private refreshLatestAnime(): void {
+    this.latestAnime = this.getLatestEntryByType('Anime');
+    this.latestAnimePosterUrl = null;
+    this.latestAnimePosterAlt = '';
+    this.latestAnimePosterMessage = '';
+
+    if (!this.latestAnime) {
+      this.latestAnimePosterState = 'idle';
+      return;
+    }
+
+    this.fetchLatestAnimePoster(this.latestAnime);
+  }
+
   private getLatestMovie(): DiaryEntry | null {
-    const movies = this.entries.filter((entry) => entry.type === 'Pelicula');
-    if (movies.length === 0) {
+    return this.getLatestEntryByType('Pelicula');
+  }
+
+  private getLatestEntryByType(type: DiaryEntry['type']): DiaryEntry | null {
+    const matches = this.entries.filter((entry) => entry.type === type);
+    if (matches.length === 0) {
       return null;
     }
 
-    return movies.reduce((latest, entry) => {
+    return matches.reduce((latest, entry) => {
       return new Date(entry.date) > new Date(latest.date) ? entry : latest;
-    }, movies[0]);
+    }, matches[0]);
   }
 
   private async fetchLatestMoviePoster(entry: DiaryEntry): Promise<void> {
-    this.posterController?.abort();
-    this.posterController = new AbortController();
+    this.moviePosterController?.abort();
+    this.moviePosterController = new AbortController();
     this.latestMoviePosterState = 'loading';
 
     try {
-      const searchResponse = await fetch(
-        `https://api.imdbapi.dev/search/titles?query=${encodeURIComponent(entry.title)}&limit=10`,
-        {
-          signal: this.posterController.signal,
-        },
-      );
-
-      if (!searchResponse.ok) {
-        throw new Error(`Busqueda no valida: ${searchResponse.status}`);
-      }
-
-      const searchPayload = (await searchResponse.json()) as {
-        titles?: Array<{ id?: string; type?: string; primaryTitle?: string }>;
-      };
-
-      const searchResults = searchPayload.titles ?? [];
-      const movieMatch =
-        searchResults.find((title) => title.type?.toLowerCase() === 'movie') ??
-        searchResults[0];
-
-      if (!movieMatch?.id) {
-        throw new Error('No se encontro el titulo en la busqueda.');
-      }
-
-      const imagesResponse = await fetch(
-        `https://api.imdbapi.dev/titles/${movieMatch.id}/images?types=poster&pageSize=10`,
-        {
-          signal: this.posterController.signal,
-        },
-      );
-
-      if (!imagesResponse.ok) {
-        throw new Error(`Imagenes no validas: ${imagesResponse.status}`);
-      }
-
-      const imagesPayload = (await imagesResponse.json()) as {
-        images?: Array<{ url?: string; width?: number; height?: number; type?: string }>;
-      };
-
-      const posters = imagesPayload.images ?? [];
-      const poster = posters
-        .filter((item) => item.url)
-        .sort((a, b) => (b.width ?? 0) * (b.height ?? 0) - (a.width ?? 0) * (a.height ?? 0))[0];
-
-      if (!poster?.url) {
-        throw new Error('No se encontro caratula.');
-      }
-
+      const poster = await this.resolvePoster(entry, ['movie'], this.moviePosterController.signal);
       this.latestMoviePosterUrl = poster.url;
-      this.latestMoviePosterAlt = `Caratula de ${movieMatch.primaryTitle ?? entry.title}`;
+      this.latestMoviePosterAlt = poster.alt;
       this.latestMoviePosterState = 'ready';
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
@@ -247,5 +251,117 @@ export class App implements OnInit {
       this.latestMoviePosterMessage =
         error instanceof Error ? error.message : 'No se pudo cargar la caratula.';
     }
+  }
+
+  private async fetchLatestSeriesPoster(entry: DiaryEntry): Promise<void> {
+    this.seriesPosterController?.abort();
+    this.seriesPosterController = new AbortController();
+    this.latestSeriesPosterState = 'loading';
+
+    try {
+      const poster = await this.resolvePoster(
+        entry,
+        ['tvseries', 'tvminiseries', 'tvepisode'],
+        this.seriesPosterController.signal,
+      );
+      this.latestSeriesPosterUrl = poster.url;
+      this.latestSeriesPosterAlt = poster.alt;
+      this.latestSeriesPosterState = 'ready';
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+      this.latestSeriesPosterState = 'error';
+      this.latestSeriesPosterMessage =
+        error instanceof Error ? error.message : 'No se pudo cargar la caratula.';
+    }
+  }
+
+  private async fetchLatestAnimePoster(entry: DiaryEntry): Promise<void> {
+    this.animePosterController?.abort();
+    this.animePosterController = new AbortController();
+    this.latestAnimePosterState = 'loading';
+
+    try {
+      const poster = await this.resolvePoster(
+        entry,
+        ['anime', 'tvseries', 'tvminiseries', 'movie'],
+        this.animePosterController.signal,
+      );
+      this.latestAnimePosterUrl = poster.url;
+      this.latestAnimePosterAlt = poster.alt;
+      this.latestAnimePosterState = 'ready';
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+      this.latestAnimePosterState = 'error';
+      this.latestAnimePosterMessage =
+        error instanceof Error ? error.message : 'No se pudo cargar la caratula.';
+    }
+  }
+
+  private async resolvePoster(
+    entry: DiaryEntry,
+    preferredTypes: string[],
+    signal: AbortSignal,
+  ): Promise<{ url: string; alt: string }> {
+    const cacheKey = `${entry.type}:${entry.title.toLowerCase()}`;
+    const cached = this.posterCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    const searchResponse = await fetch(
+      `https://api.imdbapi.dev/search/titles?query=${encodeURIComponent(entry.title)}&limit=10`,
+      { signal },
+    );
+
+    if (!searchResponse.ok) {
+      throw new Error(`Busqueda no valida: ${searchResponse.status}`);
+    }
+
+    const searchPayload = (await searchResponse.json()) as {
+      titles?: Array<{ id?: string; type?: string; primaryTitle?: string }>;
+    };
+
+    const searchResults = searchPayload.titles ?? [];
+    const normalizedPreferred = preferredTypes.map((type) => type.toLowerCase());
+    const match =
+      searchResults.find((title) => title.type && normalizedPreferred.includes(title.type.toLowerCase())) ??
+      searchResults[0];
+
+    if (!match?.id) {
+      throw new Error('No se encontro el titulo en la busqueda.');
+    }
+
+    const imagesResponse = await fetch(
+      `https://api.imdbapi.dev/titles/${match.id}/images?types=poster&pageSize=10`,
+      { signal },
+    );
+
+    if (!imagesResponse.ok) {
+      throw new Error(`Imagenes no validas: ${imagesResponse.status}`);
+    }
+
+    const imagesPayload = (await imagesResponse.json()) as {
+      images?: Array<{ url?: string; width?: number; height?: number; type?: string }>;
+    };
+
+    const posters = imagesPayload.images ?? [];
+    const poster = posters
+      .filter((item) => item.url)
+      .sort((a, b) => (b.width ?? 0) * (b.height ?? 0) - (a.width ?? 0) * (a.height ?? 0))[0];
+
+    if (!poster?.url) {
+      throw new Error('No se encontro caratula.');
+    }
+
+    const resolved = {
+      url: poster.url,
+      alt: `Caratula de ${match.primaryTitle ?? entry.title}`,
+    };
+    this.posterCache.set(cacheKey, resolved);
+    return resolved;
   }
 }

@@ -113,6 +113,12 @@
   gap: 28px;
 }
 
+.latest-tv-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
 .column {
   display: flex;
   flex-direction: column;
