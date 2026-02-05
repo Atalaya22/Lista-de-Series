@@ -36,7 +36,6 @@ export class App implements OnInit {
       id: 1,
       title: 'Aftersun',
       type: 'Pelicula',
-      imdbId: 'tt19770238',
       date: '2026-01-30',
       rating: 4.8,
       mood: 'Agridulce',
@@ -58,7 +57,6 @@ export class App implements OnInit {
       id: 3,
       title: 'Past Lives',
       type: 'Pelicula',
-      imdbId: 'tt13238346',
       date: '2026-01-25',
       rating: 4.4,
       mood: 'Nostalgica',
@@ -185,56 +183,51 @@ export class App implements OnInit {
   }
 
   private async fetchLatestMoviePoster(entry: DiaryEntry): Promise<void> {
-    if (!entry.imdbId) {
-      this.latestMoviePosterState = 'error';
-      this.latestMoviePosterMessage = 'Falta el ID de IMDb para esta entrada.';
-      return;
-    }
-
     this.posterController?.abort();
     this.posterController = new AbortController();
     this.latestMoviePosterState = 'loading';
 
     try {
-      const response = await fetch('https://graph.imdbapi.dev/v1', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const searchResponse = await fetch(
+        `https://api.imdbapi.dev/search/titles?query=${encodeURIComponent(entry.title)}&limit=10`,
+        {
+          signal: this.posterController.signal,
         },
-        body: JSON.stringify({
-          query: `{
-            title(id: "${entry.imdbId}") {
-              primary_title
-              posters {
-                url
-                width
-                height
-              }
-            }
-          }`,
-        }),
-        signal: this.posterController.signal,
-      });
+      );
 
-      if (!response.ok) {
-        throw new Error(`Respuesta no valida: ${response.status}`);
+      if (!searchResponse.ok) {
+        throw new Error(`Busqueda no valida: ${searchResponse.status}`);
       }
 
-      const payload = (await response.json()) as {
-        data?: {
-          title?: {
-            primary_title?: string;
-            posters?: Array<{ url?: string; width?: number; height?: number }>;
-          };
-        };
-        errors?: Array<{ message?: string }>;
+      const searchPayload = (await searchResponse.json()) as {
+        titles?: Array<{ id?: string; type?: string; primaryTitle?: string }>;
       };
 
-      if (payload.errors?.length) {
-        throw new Error(payload.errors[0]?.message ?? 'Error desconocido');
+      const searchResults = searchPayload.titles ?? [];
+      const movieMatch =
+        searchResults.find((title) => title.type?.toLowerCase() === 'movie') ??
+        searchResults[0];
+
+      if (!movieMatch?.id) {
+        throw new Error('No se encontro el titulo en la busqueda.');
       }
 
-      const posters = payload.data?.title?.posters ?? [];
+      const imagesResponse = await fetch(
+        `https://api.imdbapi.dev/titles/${movieMatch.id}/images?types=poster&pageSize=10`,
+        {
+          signal: this.posterController.signal,
+        },
+      );
+
+      if (!imagesResponse.ok) {
+        throw new Error(`Imagenes no validas: ${imagesResponse.status}`);
+      }
+
+      const imagesPayload = (await imagesResponse.json()) as {
+        images?: Array<{ url?: string; width?: number; height?: number; type?: string }>;
+      };
+
+      const posters = imagesPayload.images ?? [];
       const poster = posters
         .filter((item) => item.url)
         .sort((a, b) => (b.width ?? 0) * (b.height ?? 0) - (a.width ?? 0) * (a.height ?? 0))[0];
@@ -244,14 +237,15 @@ export class App implements OnInit {
       }
 
       this.latestMoviePosterUrl = poster.url;
-      this.latestMoviePosterAlt = `Caratula de ${entry.title}`;
+      this.latestMoviePosterAlt = `Caratula de ${movieMatch.primaryTitle ?? entry.title}`;
       this.latestMoviePosterState = 'ready';
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
         return;
       }
       this.latestMoviePosterState = 'error';
-      this.latestMoviePosterMessage = 'No se pudo cargar la caratula.';
+      this.latestMoviePosterMessage =
+        error instanceof Error ? error.message : 'No se pudo cargar la caratula.';
     }
   }
 }
