@@ -31,114 +31,27 @@
     ></app-quick-entry-form>
   </section>
 
-  <section class="grid">
-    <div class="column">
-      <section class="latest-movie-card">
-        <div class="latest-movie-text">
-          <p class="eyebrow">Ultima pelicula vista</p>
-          @if (latestMovie) {
-            <h2 class="latest-movie-title">{{ latestMovie.title }}</h2>
-            <p class="latest-movie-meta">
-              Vista el {{ formatEntryDate(latestMovie.date) }} · {{ latestMovie.rating }} / 5
-            </p>
-            <p class="latest-movie-note">{{ latestMovie.notes }}</p>
-          } @else {
-            <h2 class="latest-movie-title">Aun no hay peliculas</h2>
-            <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
-          }
-        </div>
-        <div class="latest-movie-poster">
-          @if (latestMoviePosterState === 'loading') {
-            <div class="poster-placeholder">Cargando caratula...</div>
-          } @else if (latestMoviePosterState === 'error') {
-            <div class="poster-placeholder">
-              {{ latestMoviePosterMessage || 'No se pudo cargar la caratula.' }}
-            </div>
-          } @else if (latestMoviePosterUrl) {
-            <img [src]="latestMoviePosterUrl" [alt]="latestMoviePosterAlt" loading="lazy" />
-          } @else {
-            <div class="poster-placeholder">Sin caratula.</div>
-          }
-        </div>
-      </section>
-      <section class="latest-tv-row">
-        <section class="latest-movie-card latest-tv-card">
-          <div class="latest-movie-text">
-            <p class="eyebrow">Ultima serie vista</p>
-            @if (latestSeries) {
-              <h2 class="latest-movie-title">{{ latestSeries.title }}</h2>
-              <p class="latest-movie-meta">
-                Vista el {{ formatEntryDate(latestSeries.date) }}
-                @if (latestSeries.season) {
-                  · {{ latestSeries.season }}
-                }
-                · {{ latestSeries.rating }} / 5
-              </p>
-              <p class="latest-movie-note">{{ latestSeries.notes }}</p>
-            } @else {
-              <h2 class="latest-movie-title">Aun no hay series</h2>
-              <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
-            }
-          </div>
-          <div class="latest-movie-poster">
-            @if (latestSeriesPosterState === 'loading') {
-              <div class="poster-placeholder">Cargando caratula...</div>
-            } @else if (latestSeriesPosterState === 'error') {
-              <div class="poster-placeholder">
-                {{ latestSeriesPosterMessage || 'No se pudo cargar la caratula.' }}
-              </div>
-            } @else if (latestSeriesPosterUrl) {
-              <img [src]="latestSeriesPosterUrl" [alt]="latestSeriesPosterAlt" loading="lazy" />
-            } @else {
-              <div class="poster-placeholder">Sin caratula.</div>
-            }
-          </div>
-        </section>
-
-        <section class="latest-movie-card latest-tv-card">
-          <div class="latest-movie-text">
-            <p class="eyebrow">Ultimo anime visto</p>
-            @if (latestAnime) {
-              <h2 class="latest-movie-title">{{ latestAnime.title }}</h2>
-              <p class="latest-movie-meta">
-                Vista el {{ formatEntryDate(latestAnime.date) }}
-                @if (latestAnime.season) {
-                  · {{ latestAnime.season }}
-                }
-                · {{ latestAnime.rating }} / 5
-              </p>
-              <p class="latest-movie-note">{{ latestAnime.notes }}</p>
-            } @else {
-              <h2 class="latest-movie-title">Aun no hay anime</h2>
-              <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
-            }
-          </div>
-          <div class="latest-movie-poster">
-            @if (latestAnimePosterState === 'loading') {
-              <div class="poster-placeholder">Cargando caratula...</div>
-            } @else if (latestAnimePosterState === 'error') {
-              <div class="poster-placeholder">
-                {{ latestAnimePosterMessage || 'No se pudo cargar la caratula.' }}
-              </div>
-            } @else if (latestAnimePosterUrl) {
-              <img [src]="latestAnimePosterUrl" [alt]="latestAnimePosterAlt" loading="lazy" />
-            } @else {
-              <div class="poster-placeholder">Sin caratula.</div>
-            }
-          </div>
-        </section>
-      </section>
-      <app-entries [entries]="entries"></app-entries>
-    </div>
-
-    <aside class="column side">
-      <app-section-header title="Resumen del mes" actionLabel="Cambiar mes"></app-section-header>
-      <app-highlights [items]="highlights"></app-highlights>
-      <app-mood-board title="Mapa de emociones" [moods]="moodBoard"></app-mood-board>
-
-      <app-pending-list [title]="Pendientes" [items]="pendingItems"></app-pending-list>
-    </aside>
-  </section>
+  <app-dashboard-grid
+    [entries]="entries"
+    [latestMovie]="latestMovie"
+    [latestMoviePosterUrl]="latestMoviePosterUrl"
+    [latestMoviePosterAlt]="latestMoviePosterAlt"
+    [latestMoviePosterState]="latestMoviePosterState"
+    [latestMoviePosterMessage]="latestMoviePosterMessage"
+    [latestSeries]="latestSeries"
+    [latestSeriesPosterUrl]="latestSeriesPosterUrl"
+    [latestSeriesPosterAlt]="latestSeriesPosterAlt"
+    [latestSeriesPosterState]="latestSeriesPosterState"
+    [latestSeriesPosterMessage]="latestSeriesPosterMessage"
+    [latestAnime]="latestAnime"
+    [latestAnimePosterUrl]="latestAnimePosterUrl"
+    [latestAnimePosterAlt]="latestAnimePosterAlt"
+    [latestAnimePosterState]="latestAnimePosterState"
+    [latestAnimePosterMessage]="latestAnimePosterMessage"
+    [highlights]="highlights"
+    [moodBoard]="moodBoard"
+    [pendingItems]="pendingItems"
+  ></app-dashboard-grid>
 </main>
 
 <router-outlet />

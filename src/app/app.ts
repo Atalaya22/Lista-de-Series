@@ -8,6 +8,7 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
 import { DiaryEntry } from './entries/entry-card/entry-card.component';
 import { QuickEntryFormComponent } from './quick-entry-form/quick-entry-form.component';
 import { TopbarComponent } from './topbar/topbar.component';
+import { DashboardGridComponent } from './dashboard-grid/dashboard-grid.component';
 
 interface Highlight {
   label: string;
@@ -26,6 +27,7 @@ interface Highlight {
     MoodBoardComponent,
     QuickEntryFormComponent,
     TopbarComponent,
+    DashboardGridComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -102,8 +104,6 @@ export class App implements OnInit {
     'Asombro',
     'Catarsis',
   ];
-
-  readonly Pendientes: string = 'Pendientes';
 
   pendingItems: PendingListItem[] = [
     {
