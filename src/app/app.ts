@@ -78,23 +78,36 @@ export class App implements OnInit {
     },
   ];
 
-  readonly highlights: Highlight[] = [
-    {
-      label: 'Tiempo total',
-      value: '24h 35m',
-      hint: 'Estimado en enero',
-    },
-    {
-      label: 'Estado de animo',
-      value: 'Melancolico',
-      hint: 'Tema dominante',
-    },
-    {
-      label: 'Lugar favorito',
-      value: 'Sala / noche',
-      hint: '62% de tus entradas',
-    },
-  ];
+  get highlights(): Highlight[] {
+    const latestEntryDate = this.entries.reduce(
+      (latest, entry) => (new Date(entry.date) > latest ? new Date(entry.date) : latest),
+      new Date(0),
+    );
+    const month = latestEntryDate.getMonth();
+    const year = latestEntryDate.getFullYear();
+    const monthlyItems = this.entries.filter((entry) => {
+      const entryDate = new Date(entry.date);
+      return entryDate.getMonth() === month && entryDate.getFullYear() === year;
+    }).length;
+
+    return [
+      {
+        label: 'Items vistos',
+        value: `${monthlyItems}`,
+        hint: `En ${new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(latestEntryDate)}`,
+      },
+      {
+        label: 'Estado de animo',
+        value: 'Melancolico',
+        hint: 'Tema dominante',
+      },
+      {
+        label: 'Lugar favorito',
+        value: 'Sala / noche',
+        hint: '62% de tus entradas',
+      },
+    ];
+  }
 
   moodBoard: string[] = this.buildMoodBoard(this.entries);
 
