@@ -14,11 +14,22 @@ export class QuickEntryFormComponent {
   @Output() entrySaved = new EventEmitter<DiaryEntry>();
   @Output() pendingSaved = new EventEmitter<PendingListItem>();
 
+  readonly moodOptions: string[] = [
+    'Euforica',
+    'Feliz',
+    'Inspirada',
+    'Nostalgica',
+    'Agridulce',
+    'Tensa',
+    'Catartica',
+    'Triste',
+  ];
+
   title: string = '';
   type: DiaryEntry['type'] = 'Pelicula';
   rating: string = '';
   notes: string = '';
-  mood: string = '';
+  mood: string = this.moodOptions[3];
   tags: string = '';
   isPending: boolean = false;
 
@@ -72,13 +83,12 @@ export class QuickEntryFormComponent {
     this.entrySaved.emit(entry);
     this.resetForm();
   }
-
   private resetForm(): void {
     this.title = '';
     this.type = 'Pelicula';
     this.rating = '';
     this.notes = '';
-    this.mood = '';
+    this.mood = this.moodOptions[3];
     this.tags = '';
     this.isPending = false;
   }

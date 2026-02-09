@@ -24,13 +24,11 @@
         </div>
       </div>
     </div>
-
     <app-quick-entry-form
       (entrySaved)="addEntry($event)"
       (pendingSaved)="addPendingItem($event)"
     ></app-quick-entry-form>
   </section>
-
   <app-dashboard-grid
     [entries]="entries"
     [latestMovie]="latestMovie"

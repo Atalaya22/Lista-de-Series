@@ -37,7 +37,11 @@
     <div class="field-row">
       <div class="field">
         <label>Mood</label>
-        <input name="mood" [(ngModel)]="mood" placeholder="Ej: Nostalgica" />
+        <select name="mood" [(ngModel)]="mood">
+          @for (option of moodOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
       </div>
       <div class="field">
         <label>Tags</label>

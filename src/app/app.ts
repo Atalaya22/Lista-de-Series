@@ -96,14 +96,7 @@ export class App implements OnInit {
     },
   ];
 
-  readonly moodBoard: string[] = [
-    'Intenso',
-    'Confort',
-    'Nostalgia',
-    'Energia',
-    'Asombro',
-    'Catarsis',
-  ];
+  moodBoard: string[] = this.buildMoodBoard(this.entries);
 
   pendingItems: PendingListItem[] = [
     {
@@ -159,6 +152,7 @@ export class App implements OnInit {
 
   addEntry(entry: DiaryEntry): void {
     this.entries = [entry, ...this.entries];
+    this.moodBoard = this.buildMoodBoard(this.entries);
     if (entry.type === 'Pelicula') {
       this.refreshLatestMovie();
     } else if (entry.type === 'Serie') {
@@ -235,6 +229,21 @@ export class App implements OnInit {
     return matches.reduce((latest, entry) => {
       return new Date(entry.date) > new Date(latest.date) ? entry : latest;
     }, matches[0]);
+  }
+
+  private buildMoodBoard(entries: DiaryEntry[]): string[] {
+    if (entries.length === 0) {
+      return [];
+    }
+
+    const moodCounts = new Map<string, number>();
+    for (const entry of entries) {
+      moodCounts.set(entry.mood, (moodCounts.get(entry.mood) ?? 0) + 1);
+    }
+
+    return Array.from(moodCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([mood, count]) => `${mood} ${Math.round((count / entries.length) * 100)}%`);
   }
 
   private async fetchLatestMoviePoster(entry: DiaryEntry): Promise<void> {
