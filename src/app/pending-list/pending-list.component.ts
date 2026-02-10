@@ -1,9 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 export interface PendingListItem {
   title: string;
-  meta: string;
-  actionLabel: string;
 }
 
 @Component({
@@ -15,4 +13,5 @@ export interface PendingListItem {
 export class PendingListComponent {
   @Input() title = 'Lista pendiente';
   @Input({ required: true }) items: PendingListItem[] = [];
+  @Output() discard = new EventEmitter<number>();
 }

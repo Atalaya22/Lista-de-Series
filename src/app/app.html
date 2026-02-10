@@ -29,6 +29,7 @@
       (pendingSaved)="addPendingItem($event)"
     ></app-quick-entry-form>
   </section>
+
   <app-dashboard-grid
     [entries]="entries"
     [latestMovie]="latestMovie"
@@ -52,6 +53,7 @@
     [monthOptions]="summaryMonthOptions"
     [selectedMonth]="selectedSummaryMonth"
     (monthSelected)="setSummaryMonth($event)"
+    (pendingDiscarded)="discardPendingItem($event)"
   ></app-dashboard-grid>
 </main>
 

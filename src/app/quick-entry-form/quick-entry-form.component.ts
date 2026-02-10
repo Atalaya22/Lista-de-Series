@@ -67,11 +67,8 @@ export class QuickEntryFormComponent {
     }
 
     if (this.isPending) {
-      const meta = notes ? `${this.type} • ${notes}` : `${this.type} • Pendiente`;
       const pendingItem: PendingListItem = {
         title,
-        meta,
-        actionLabel: 'Agregar',
       };
       this.pendingSaved.emit(pendingItem);
       this.resetForm();

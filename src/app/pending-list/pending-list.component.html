@@ -1,12 +1,11 @@
 <div class="list-card">
   <p class="section-title">{{ title }}</p>
-  @for (item of items; track item.title) {
+  @for (item of items; track item.title; let index = $index) {
     <div class="list-item">
       <div>
         <p>{{ item.title }}</p>
-        <span>{{ item.meta }}</span>
       </div>
-      <button class="ghost">{{ item.actionLabel }}</button>
+      <button class="ghost" type="button" (click)="discard.emit(index)">Descartar</button>
     </div>
   }
 </div>

@@ -144,13 +144,9 @@ export class App implements OnInit {
   pendingItems: PendingListItem[] = [
     {
       title: 'Perfect Days',
-      meta: 'Drama • 1h 55m',
-      actionLabel: 'Agregar',
     },
     {
       title: 'True Detective',
-      meta: 'Serie • Temp. 1',
-      actionLabel: 'Agregar',
     },
   ];
 
@@ -225,6 +221,10 @@ export class App implements OnInit {
 
   addPendingItem(item: PendingListItem): void {
     this.pendingItems = [item, ...this.pendingItems];
+  }
+
+  discardPendingItem(index: number): void {
+    this.pendingItems = this.pendingItems.filter((_, itemIndex) => itemIndex !== index);
   }
 
   setSummaryMonth(monthKey: string): void {

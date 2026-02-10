@@ -117,6 +117,10 @@
     <app-highlights [items]="highlights"></app-highlights>
     <app-mood-board title="Mapa de emociones" [moods]="moodBoard"></app-mood-board>
 
-    <app-pending-list title="Pendientes" [items]="pendingItems"></app-pending-list>
+    <app-pending-list
+      title="Pendientes"
+      [items]="pendingItems"
+      (discard)="pendingDiscarded.emit($event)"
+    ></app-pending-list>
   </aside>
 </section>

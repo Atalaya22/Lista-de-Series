@@ -42,6 +42,7 @@ export class DashboardGridComponent {
   @Input() monthOptions: Array<{ value: string; label: string }> = [];
   @Input() selectedMonth = '';
   @Output() monthSelected = new EventEmitter<string>();
+  @Output() pendingDiscarded = new EventEmitter<number>();
 
   formatEntryDate(date: string): string {
     return new Intl.DateTimeFormat('es-ES', {
