@@ -26,50 +26,7 @@ interface Highlight {
 export class App implements OnInit {
   private summaryMonthKey: string | null = null;
 
-  entries: DiaryEntry[] = [
-    {
-      id: 1,
-      title: 'Aftersun',
-      type: 'Pelicula',
-      date: '2026-01-30',
-      rating: 4.8,
-      mood: 'Agridulce',
-      tags: ['Intima', 'Emocional', 'Lenta'],
-      notes: 'Planos largos y silencios que se sienten como recuerdos.',
-    },
-    {
-      id: 2,
-      title: 'The Bear',
-      type: 'Serie',
-      season: 'Temp. 2',
-      date: '2026-01-27',
-      rating: 4.6,
-      mood: 'Catartica',
-      tags: ['Cocina', 'Ansiedad', 'Familia'],
-      notes: 'Un caos hermoso. Episodio 6 me dejo sin aire.',
-    },
-    {
-      id: 3,
-      title: 'Past Lives',
-      type: 'Pelicula',
-      date: '2026-01-25',
-      rating: 4.4,
-      mood: 'Nostalgica',
-      tags: ['Romance', 'Destino'],
-      notes: 'Pequenos gestos. Conversaciones que se quedan.',
-    },
-    {
-      id: 4,
-      title: 'Severance',
-      type: 'Serie',
-      season: 'Temp. 1',
-      date: '2026-01-21',
-      rating: 4.7,
-      mood: 'Intriga',
-      tags: ['Sci-fi', 'Corporativo', 'Distopia'],
-      notes: 'Estetica impecable. Final perfecto para debatir.',
-    },
-  ];
+  entries: DiaryEntry[] = [];
 
   get highlights(): Highlight[] {
     if (this.entries.length === 0) {
@@ -179,6 +136,9 @@ export class App implements OnInit {
   }
 
   get averageRating(): number {
+    if (this.entries.length === 0) {
+      return 0;
+    }
     const total = this.entries.reduce((sum, entry) => sum + entry.rating, 0);
     return total / this.entries.length;
   }

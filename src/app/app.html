@@ -29,31 +29,34 @@
       (pendingSaved)="addPendingItem($event)"
     ></app-quick-entry-form>
   </section>
-  <app-dashboard-grid
-    [entries]="entries"
-    [latestMovie]="latestMovie"
-    [latestMoviePosterUrl]="latestMoviePosterUrl"
-    [latestMoviePosterAlt]="latestMoviePosterAlt"
-    [latestMoviePosterState]="latestMoviePosterState"
-    [latestMoviePosterMessage]="latestMoviePosterMessage"
-    [latestSeries]="latestSeries"
-    [latestSeriesPosterUrl]="latestSeriesPosterUrl"
-    [latestSeriesPosterAlt]="latestSeriesPosterAlt"
-    [latestSeriesPosterState]="latestSeriesPosterState"
-    [latestSeriesPosterMessage]="latestSeriesPosterMessage"
-    [latestAnime]="latestAnime"
-    [latestAnimePosterUrl]="latestAnimePosterUrl"
-    [latestAnimePosterAlt]="latestAnimePosterAlt"
-    [latestAnimePosterState]="latestAnimePosterState"
-    [latestAnimePosterMessage]="latestAnimePosterMessage"
-    [highlights]="highlights"
-    [moodBoard]="moodBoard"
-    [pendingItems]="pendingItems"
-    [monthOptions]="summaryMonthOptions"
-    [selectedMonth]="selectedSummaryMonth"
-    (monthSelected)="setSummaryMonth($event)"
-    (pendingDiscarded)="discardPendingItem($event)"
-  ></app-dashboard-grid>
+
+  @if (entries.length > 0) {
+    <app-dashboard-grid
+      [entries]="entries"
+      [latestMovie]="latestMovie"
+      [latestMoviePosterUrl]="latestMoviePosterUrl"
+      [latestMoviePosterAlt]="latestMoviePosterAlt"
+      [latestMoviePosterState]="latestMoviePosterState"
+      [latestMoviePosterMessage]="latestMoviePosterMessage"
+      [latestSeries]="latestSeries"
+      [latestSeriesPosterUrl]="latestSeriesPosterUrl"
+      [latestSeriesPosterAlt]="latestSeriesPosterAlt"
+      [latestSeriesPosterState]="latestSeriesPosterState"
+      [latestSeriesPosterMessage]="latestSeriesPosterMessage"
+      [latestAnime]="latestAnime"
+      [latestAnimePosterUrl]="latestAnimePosterUrl"
+      [latestAnimePosterAlt]="latestAnimePosterAlt"
+      [latestAnimePosterState]="latestAnimePosterState"
+      [latestAnimePosterMessage]="latestAnimePosterMessage"
+      [highlights]="highlights"
+      [moodBoard]="moodBoard"
+      [pendingItems]="pendingItems"
+      [monthOptions]="summaryMonthOptions"
+      [selectedMonth]="selectedSummaryMonth"
+      (monthSelected)="setSummaryMonth($event)"
+      (pendingDiscarded)="discardPendingItem($event)"
+    ></app-dashboard-grid>
+  }
 </main>
 
 <router-outlet />
