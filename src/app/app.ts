@@ -141,14 +141,7 @@ export class App implements OnInit {
 
   moodBoard: string[] = this.buildMoodBoard(this.entries);
 
-  pendingItems: PendingListItem[] = [
-    {
-      title: 'Perfect Days',
-    },
-    {
-      title: 'True Detective',
-    },
-  ];
+  pendingItems: PendingListItem[] = [];
 
   latestMovie: DiaryEntry | null = null;
   latestMoviePosterUrl: string | null = null;
