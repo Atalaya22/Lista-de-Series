@@ -33,6 +33,8 @@ interface Highlight {
   styleUrl: './app.css',
 })
 export class App implements OnInit {
+  private summaryMonthKey: string | null = null;
+
   entries: DiaryEntry[] = [
     {
       id: 1,
@@ -99,15 +101,16 @@ export class App implements OnInit {
       ];
     }
 
-    const latestEntryDate = this.entries.reduce(
-      (latest, entry) => (new Date(entry.date) > latest ? new Date(entry.date) : latest),
-      new Date(0),
-    );
-    const month = latestEntryDate.getMonth();
-    const year = latestEntryDate.getFullYear();
+    const monthKeys = this.getAvailableMonthKeys();
+    const selectedMonthKey =
+      this.summaryMonthKey && monthKeys.includes(this.summaryMonthKey)
+        ? this.summaryMonthKey
+        : monthKeys[0];
+    const [year, month] = selectedMonthKey.split('-').map(Number);
+    const monthDate = new Date(year, month - 1, 1);
     const monthlyEntries = this.entries.filter((entry) => {
       const entryDate = new Date(entry.date);
-      return entryDate.getMonth() === month && entryDate.getFullYear() === year;
+      return entryDate.getMonth() === month - 1 && entryDate.getFullYear() === year;
     });
     const monthlyItems = monthlyEntries.length;
 
@@ -132,7 +135,7 @@ export class App implements OnInit {
       {
         label: 'Items vistos',
         value: `${monthlyItems}`,
-        hint: `En ${new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(latestEntryDate)}`,
+        hint: `En ${new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(monthDate)}`,
       },
       {
         label: 'Estado de animo',
@@ -183,6 +186,7 @@ export class App implements OnInit {
   private posterCache = new Map<string, { url: string; alt: string }>();
 
   ngOnInit(): void {
+    this.syncSummaryMonthSelection();
     this.refreshLatestMovie();
     this.refreshLatestSeries();
     this.refreshLatestAnime();
@@ -203,6 +207,7 @@ export class App implements OnInit {
 
   addEntry(entry: DiaryEntry): void {
     this.entries = [entry, ...this.entries];
+    this.syncSummaryMonthSelection();
     this.moodBoard = this.buildMoodBoard(this.entries);
     if (entry.type === 'Pelicula') {
       this.refreshLatestMovie();
@@ -215,6 +220,22 @@ export class App implements OnInit {
 
   addPendingItem(item: PendingListItem): void {
     this.pendingItems = [item, ...this.pendingItems];
+  }
+
+  changeSummaryMonth(): void {
+    const monthKeys = this.getAvailableMonthKeys();
+    if (monthKeys.length === 0) {
+      return;
+    }
+
+    if (!this.summaryMonthKey) {
+      this.summaryMonthKey = monthKeys[0];
+      return;
+    }
+
+    const currentIndex = monthKeys.indexOf(this.summaryMonthKey);
+    const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % monthKeys.length : 0;
+    this.summaryMonthKey = monthKeys[nextIndex];
   }
 
   formatEntryDate(date: string): string {
@@ -295,6 +316,29 @@ export class App implements OnInit {
     return Array.from(moodCounts.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([mood, count]) => `${mood} ${Math.round((count / entries.length) * 100)}%`);
+  }
+
+  private getAvailableMonthKeys(): string[] {
+    return Array.from(
+      new Set(
+        this.entries.map((entry) => {
+          const entryDate = new Date(entry.date);
+          return `${entryDate.getFullYear()}-${String(entryDate.getMonth() + 1).padStart(2, '0')}`;
+        }),
+      ),
+    ).sort((a, b) => b.localeCompare(a));
+  }
+
+  private syncSummaryMonthSelection(): void {
+    const monthKeys = this.getAvailableMonthKeys();
+    if (monthKeys.length === 0) {
+      this.summaryMonthKey = null;
+      return;
+    }
+
+    if (!this.summaryMonthKey || !monthKeys.includes(this.summaryMonthKey)) {
+      this.summaryMonthKey = monthKeys[0];
+    }
   }
 
   private async fetchLatestMoviePoster(entry: DiaryEntry): Promise<void> {

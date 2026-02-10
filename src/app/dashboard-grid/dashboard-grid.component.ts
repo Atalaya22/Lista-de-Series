@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EntriesComponent } from '../entries/entries.component';
 import { HighlightsComponent } from '../highlights/highlights.component';
 import { MoodBoardComponent } from '../mood-board/mood-board.component';
@@ -39,6 +39,7 @@ export class DashboardGridComponent {
   @Input() highlights: Array<{ label: string; value: string; hint: string }> = [];
   @Input() moodBoard: string[] = [];
   @Input() pendingItems: PendingListItem[] = [];
+  @Output() monthChange = new EventEmitter<void>();
 
   formatEntryDate(date: string): string {
     return new Intl.DateTimeFormat('es-ES', {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-section-header',
@@ -9,4 +9,9 @@ import { Component, Input } from '@angular/core';
 export class SectionHeaderComponent {
   @Input({ required: true }) title = '';
   @Input() actionLabel?: string;
+  @Output() actionClicked = new EventEmitter<void>();
+
+  onActionClick(): void {
+    this.actionClicked.emit();
+  }
 }

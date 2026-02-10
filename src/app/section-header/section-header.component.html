@@ -1,6 +1,6 @@
 <div class="section-header">
   <h2>{{ title }}</h2>
   @if (actionLabel) {
-    <button class="ghost">{{ actionLabel }}</button>
+    <button class="ghost" type="button" (click)="onActionClick()">{{ actionLabel }}</button>
   }
 </div>
