@@ -79,16 +79,54 @@ export class App implements OnInit {
   ];
 
   get highlights(): Highlight[] {
+    if (this.entries.length === 0) {
+      return [
+        {
+          label: 'Items vistos',
+          value: '0',
+          hint: 'Sin registros',
+        },
+        {
+          label: 'Estado de animo',
+          value: 'Sin datos',
+          hint: 'Sin entradas este mes',
+        },
+        {
+          label: 'Lugar favorito',
+          value: 'Sin datos',
+          hint: 'Sin entradas este mes',
+        },
+      ];
+    }
+
     const latestEntryDate = this.entries.reduce(
       (latest, entry) => (new Date(entry.date) > latest ? new Date(entry.date) : latest),
       new Date(0),
     );
     const month = latestEntryDate.getMonth();
     const year = latestEntryDate.getFullYear();
-    const monthlyItems = this.entries.filter((entry) => {
+    const monthlyEntries = this.entries.filter((entry) => {
       const entryDate = new Date(entry.date);
       return entryDate.getMonth() === month && entryDate.getFullYear() === year;
-    }).length;
+    });
+    const monthlyItems = monthlyEntries.length;
+
+    const moodCounts = new Map<string, number>();
+    const placeCounts = new Map<string, number>();
+    for (const entry of monthlyEntries) {
+      moodCounts.set(entry.mood, (moodCounts.get(entry.mood) ?? 0) + 1);
+      const place = entry.place?.trim() || 'Sin lugar';
+      placeCounts.set(place, (placeCounts.get(place) ?? 0) + 1);
+    }
+
+    const [topMood = 'Sin datos', topMoodCount = 0] = Array.from(moodCounts.entries()).sort(
+      (a, b) => b[1] - a[1],
+    )[0] ?? [];
+    const [topPlace = 'Sin datos', topPlaceCount = 0] = Array.from(placeCounts.entries()).sort(
+      (a, b) => b[1] - a[1],
+    )[0] ?? [];
+    const topMoodPercent = monthlyItems > 0 ? Math.round((topMoodCount / monthlyItems) * 100) : 0;
+    const topPlacePercent = monthlyItems > 0 ? Math.round((topPlaceCount / monthlyItems) * 100) : 0;
 
     return [
       {
@@ -98,13 +136,13 @@ export class App implements OnInit {
       },
       {
         label: 'Estado de animo',
-        value: 'Melancolico',
-        hint: 'Tema dominante',
+        value: topMood,
+        hint: monthlyItems > 0 ? `Tema dominante • ${topMoodPercent}% del mes` : 'Sin entradas este mes',
       },
       {
         label: 'Lugar favorito',
-        value: 'Sala / noche',
-        hint: '62% de tus entradas',
+        value: topPlace,
+        hint: monthlyItems > 0 ? `${topPlacePercent}% de tus entradas` : 'Sin entradas este mes',
       },
     ];
   }
