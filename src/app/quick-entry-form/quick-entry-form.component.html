@@ -34,6 +34,14 @@
         style="resize: none"
       ></textarea>
     </div>
+    <div class="field">
+      <label>Lugar</label>
+      <select name="place" [(ngModel)]="place">
+        @for (option of placeOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+    </div>
     <div class="field-row">
       <div class="field">
         <label>Mood</label>

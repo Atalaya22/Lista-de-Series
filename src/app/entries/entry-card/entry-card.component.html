@@ -9,6 +9,9 @@
     <div class="entry-rating">{{ entry.rating }}</div>
   </div>
   <p class="entry-notes">{{ entry.notes }}</p>
+  @if (entry.place) {
+    <p class="entry-notes">Lugar: {{ entry.place }}</p>
+  }
   <div class="entry-tags">
     @for (tag of entry.tags; track tag) {
       <span>{{ tag }}</span>

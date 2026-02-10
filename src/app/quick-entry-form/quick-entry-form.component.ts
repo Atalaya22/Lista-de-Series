@@ -24,11 +24,20 @@ export class QuickEntryFormComponent {
     'Catartica',
     'Triste',
   ];
+  readonly placeOptions: string[] = [
+    'Sala de casa',
+    'Cine',
+    'Cuarto',
+    'Casa de un amigo',
+    'Transporte',
+    'Otro',
+  ];
 
   title: string = '';
   type: DiaryEntry['type'] = 'Pelicula';
   rating: string = '';
   notes: string = '';
+  place: string = this.placeOptions[0];
   mood: string = this.moodOptions[3];
   tags: string = '';
   isPending: boolean = false;
@@ -42,6 +51,7 @@ export class QuickEntryFormComponent {
   saveEntry(): void {
     const title = this.title.trim();
     const notes = this.notes.trim();
+    const place = this.place.trim();
     const mood = this.mood.trim();
     const tags = this.tags
       .split(',')
@@ -75,6 +85,7 @@ export class QuickEntryFormComponent {
       type: this.type,
       date: today.toISOString().split('T')[0],
       rating: safeRating,
+      place: place || 'Sin lugar',
       mood: mood || 'Pendiente',
       tags: tags.length > 0 ? tags : ['Entrada rapida'],
       notes: notes || 'Sin nota rapida.',
@@ -88,6 +99,7 @@ export class QuickEntryFormComponent {
     this.type = 'Pelicula';
     this.rating = '';
     this.notes = '';
+    this.place = this.placeOptions[0];
     this.mood = this.moodOptions[3];
     this.tags = '';
     this.isPending = false;

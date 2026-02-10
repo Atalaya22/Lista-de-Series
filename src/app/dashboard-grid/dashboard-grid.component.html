@@ -8,6 +8,9 @@
           <p class="latest-movie-meta">
             Vista el {{ formatEntryDate(latestMovie.date) }} · {{ latestMovie.rating }} / 5
           </p>
+          @if (latestMovie.place) {
+            <p class="latest-movie-meta">Lugar: {{ latestMovie.place }}</p>
+          }
           <p class="latest-movie-note">{{ latestMovie.notes }}</p>
         } @else {
           <h2 class="latest-movie-title">Aun no hay peliculas</h2>
@@ -41,6 +44,9 @@
               }
               · {{ latestSeries.rating }} / 5
             </p>
+            @if (latestSeries.place) {
+              <p class="latest-movie-meta">Lugar: {{ latestSeries.place }}</p>
+            }
             <p class="latest-movie-note">{{ latestSeries.notes }}</p>
           } @else {
             <h2 class="latest-movie-title">Aun no hay series</h2>
@@ -74,6 +80,9 @@
               }
               · {{ latestAnime.rating }} / 5
             </p>
+            @if (latestAnime.place) {
+              <p class="latest-movie-meta">Lugar: {{ latestAnime.place }}</p>
+            }
             <p class="latest-movie-note">{{ latestAnime.notes }}</p>
           } @else {
             <h2 class="latest-movie-title">Aun no hay anime</h2>

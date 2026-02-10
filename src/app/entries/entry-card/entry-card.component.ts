@@ -5,6 +5,7 @@ export interface DiaryEntry {
   title: string;
   type: 'Pelicula' | 'Serie' | 'Anime';
   season?: string;
+  place?: string;
   date: string;
   rating: number;
   mood: string;
