@@ -39,7 +39,9 @@ export class DashboardGridComponent {
   @Input() highlights: Array<{ label: string; value: string; hint: string }> = [];
   @Input() moodBoard: string[] = [];
   @Input() pendingItems: PendingListItem[] = [];
-  @Output() monthChange = new EventEmitter<void>();
+  @Input() monthOptions: Array<{ value: string; label: string }> = [];
+  @Input() selectedMonth = '';
+  @Output() monthSelected = new EventEmitter<string>();
 
   formatEntryDate(date: string): string {
     return new Intl.DateTimeFormat('es-ES', {

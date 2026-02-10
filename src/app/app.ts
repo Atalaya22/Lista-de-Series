@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { EntriesComponent } from './entries/entries.component';
-import { HighlightsComponent } from './highlights/highlights.component';
-import { MoodBoardComponent } from './mood-board/mood-board.component';
-import { PendingListComponent, PendingListItem } from './pending-list/pending-list.component';
-import { SectionHeaderComponent } from './section-header/section-header.component';
+import { PendingListItem } from './pending-list/pending-list.component';
 import { DiaryEntry } from './entries/entry-card/entry-card.component';
 import { QuickEntryFormComponent } from './quick-entry-form/quick-entry-form.component';
 import { TopbarComponent } from './topbar/topbar.component';
@@ -20,11 +16,6 @@ interface Highlight {
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    EntriesComponent,
-    PendingListComponent,
-    SectionHeaderComponent,
-    HighlightsComponent,
-    MoodBoardComponent,
     QuickEntryFormComponent,
     TopbarComponent,
     DashboardGridComponent,
@@ -101,11 +92,9 @@ export class App implements OnInit {
       ];
     }
 
-    const monthKeys = this.getAvailableMonthKeys();
+    const monthKeys = this.summaryMonthOptions.map((option) => option.value);
     const selectedMonthKey =
-      this.summaryMonthKey && monthKeys.includes(this.summaryMonthKey)
-        ? this.summaryMonthKey
-        : monthKeys[0];
+      this.summaryMonthKey && monthKeys.includes(this.summaryMonthKey) ? this.summaryMonthKey : monthKeys[0];
     const [year, month] = selectedMonthKey.split('-').map(Number);
     const monthDate = new Date(year, month - 1, 1);
     const monthlyEntries = this.entries.filter((entry) => {
@@ -205,6 +194,22 @@ export class App implements OnInit {
     return total / this.entries.length;
   }
 
+  get summaryMonthOptions(): Array<{ value: string; label: string }> {
+    const year = this.getSummaryYear();
+    const formatter = new Intl.DateTimeFormat('es-ES', { month: 'long' });
+    return Array.from({ length: 12 }, (_, monthIndex) => {
+      const monthDate = new Date(year, monthIndex, 1);
+      return {
+        value: `${year}-${String(monthIndex + 1).padStart(2, '0')}`,
+        label: formatter.format(monthDate),
+      };
+    });
+  }
+
+  get selectedSummaryMonth(): string {
+    return this.summaryMonthKey ?? this.summaryMonthOptions[0]?.value ?? '';
+  }
+
   addEntry(entry: DiaryEntry): void {
     this.entries = [entry, ...this.entries];
     this.syncSummaryMonthSelection();
@@ -222,20 +227,8 @@ export class App implements OnInit {
     this.pendingItems = [item, ...this.pendingItems];
   }
 
-  changeSummaryMonth(): void {
-    const monthKeys = this.getAvailableMonthKeys();
-    if (monthKeys.length === 0) {
-      return;
-    }
-
-    if (!this.summaryMonthKey) {
-      this.summaryMonthKey = monthKeys[0];
-      return;
-    }
-
-    const currentIndex = monthKeys.indexOf(this.summaryMonthKey);
-    const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % monthKeys.length : 0;
-    this.summaryMonthKey = monthKeys[nextIndex];
+  setSummaryMonth(monthKey: string): void {
+    this.summaryMonthKey = monthKey;
   }
 
   formatEntryDate(date: string): string {
@@ -318,19 +311,19 @@ export class App implements OnInit {
       .map(([mood, count]) => `${mood} ${Math.round((count / entries.length) * 100)}%`);
   }
 
-  private getAvailableMonthKeys(): string[] {
-    return Array.from(
-      new Set(
-        this.entries.map((entry) => {
-          const entryDate = new Date(entry.date);
-          return `${entryDate.getFullYear()}-${String(entryDate.getMonth() + 1).padStart(2, '0')}`;
-        }),
-      ),
-    ).sort((a, b) => b.localeCompare(a));
+  private getSummaryYear(): number {
+    if (this.entries.length === 0) {
+      return new Date().getFullYear();
+    }
+
+    const latestEntry = this.entries.reduce((latest, entry) =>
+      new Date(entry.date) > new Date(latest.date) ? entry : latest,
+    );
+    return new Date(latestEntry.date).getFullYear();
   }
 
   private syncSummaryMonthSelection(): void {
-    const monthKeys = this.getAvailableMonthKeys();
+    const monthKeys = this.summaryMonthOptions.map((option) => option.value);
     if (monthKeys.length === 0) {
       this.summaryMonthKey = null;
       return;

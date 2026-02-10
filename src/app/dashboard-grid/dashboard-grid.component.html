@@ -110,8 +110,9 @@
   <aside class="column side">
     <app-section-header
       title="Resumen del mes"
-      actionLabel="Cambiar mes"
-      (actionClicked)="monthChange.emit()"
+      [monthOptions]="monthOptions"
+      [selectedMonth]="selectedMonth"
+      (monthSelected)="monthSelected.emit($event)"
     ></app-section-header>
     <app-highlights [items]="highlights"></app-highlights>
     <app-mood-board title="Mapa de emociones" [moods]="moodBoard"></app-mood-board>

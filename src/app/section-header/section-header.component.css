@@ -19,3 +19,24 @@
   color: #11121a;
   cursor: pointer;
 }
+
+.month-dropdown {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.month-dropdown-label {
+  font-size: 0.8rem;
+  color: #4c4f67;
+}
+
+.month-select {
+  border-radius: 12px;
+  border: 1px solid rgba(17, 18, 26, 0.2);
+  background: #fff;
+  padding: 10px 12px;
+  font-family: "Space Grotesk", sans-serif;
+  color: #11121a;
+}

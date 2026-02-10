@@ -49,7 +49,9 @@
     [highlights]="highlights"
     [moodBoard]="moodBoard"
     [pendingItems]="pendingItems"
-    (monthChange)="changeSummaryMonth()"
+    [monthOptions]="summaryMonthOptions"
+    [selectedMonth]="selectedSummaryMonth"
+    (monthSelected)="setSummaryMonth($event)"
   ></app-dashboard-grid>
 </main>
 

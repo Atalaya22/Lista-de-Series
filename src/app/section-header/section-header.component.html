@@ -1,6 +1,18 @@
 <div class="section-header">
   <h2>{{ title }}</h2>
-  @if (actionLabel) {
-    <button class="ghost" type="button" (click)="onActionClick()">{{ actionLabel }}</button>
-  }
 </div>
+@if (monthOptions.length > 0) {
+  <div class="month-dropdown">
+    <label for="month-select" class="month-dropdown-label">Selecciona un mes</label>
+    <select
+      id="month-select"
+      class="month-select"
+      [ngModel]="selectedMonth"
+      (ngModelChange)="onMonthSelected($event)"
+    >
+      @for (option of monthOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+}
