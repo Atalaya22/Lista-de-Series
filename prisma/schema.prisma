@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Multimedia {
+  id     Int      @id @default(autoincrement())
+  title  String   @map("nombre") @db.VarChar(100)
+  type   String   @map("tipo") @db.VarChar(50)
+  rating Int      @map("calificacion")
+  place  String   @map("lugar") @db.VarChar(50)
+  mood   String   @db.VarChar(50)
+  notes  String?  @map("anotacion") @db.VarChar(255)
+  date   DateTime @map("fecha") @db.Date
+
+  @@map("multimedia")
+}
