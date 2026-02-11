@@ -12,6 +12,35 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## API + PostgreSQL
+
+This project includes a local API in `server/index.js` for persisting entries in PostgreSQL.
+
+1. Copy envs:
+
+```bash
+cp .env.example .env
+```
+
+2. Start API server:
+
+```bash
+npm run start:api
+```
+
+3. In another terminal, start Angular:
+
+```bash
+npm start
+```
+
+Default DB values in `.env.example` are:
+- `PGHOST=localhost`
+- `PGPORT=8080`
+- `PGUSER=admin`
+- `PGPASSWORD=admin`
+- `PGDATABASE=postgres`
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PendingListItem } from './pending-list/pending-list.component';
 import { DiaryEntry } from './entries/entry-card/entry-card.component';
 import { QuickEntryFormComponent } from './quick-entry-form/quick-entry-form.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { DashboardGridComponent } from './dashboard-grid/dashboard-grid.component';
+import { MultimediaApiService } from './services/multimedia-api.service';
 
 interface Highlight {
   label: string;
@@ -25,6 +27,8 @@ interface Highlight {
 })
 export class App implements OnInit {
   private summaryMonthKey: string | null = null;
+  isLoadingEntries = false;
+  entriesErrorMessage = '';
 
   entries: DiaryEntry[] = [];
 
@@ -120,11 +124,10 @@ export class App implements OnInit {
   private animePosterController?: AbortController;
   private posterCache = new Map<string, { url: string; alt: string }>();
 
+  constructor(private readonly multimediaApi: MultimediaApiService) {}
+
   ngOnInit(): void {
-    this.syncSummaryMonthSelection();
-    this.refreshLatestMovie();
-    this.refreshLatestSeries();
-    this.refreshLatestAnime();
+    void this.loadEntries();
   }
 
   get moviesCount(): number {
@@ -159,16 +162,14 @@ export class App implements OnInit {
     return this.summaryMonthKey ?? this.summaryMonthOptions[0]?.value ?? '';
   }
 
-  addEntry(entry: DiaryEntry): void {
-    this.entries = [entry, ...this.entries];
-    this.syncSummaryMonthSelection();
-    this.moodBoard = this.buildMoodBoard(this.entries);
-    if (entry.type === 'Pelicula') {
-      this.refreshLatestMovie();
-    } else if (entry.type === 'Serie') {
-      this.refreshLatestSeries();
-    } else if (entry.type === 'Anime') {
-      this.refreshLatestAnime();
+  async addEntry(entry: DiaryEntry): Promise<void> {
+    try {
+      const createdEntry = await this.multimediaApi.createEntry(entry);
+      this.entries = [createdEntry, ...this.entries];
+      this.entriesErrorMessage = '';
+      this.syncDashboardState(createdEntry);
+    } catch (error) {
+      this.entriesErrorMessage = this.getApiErrorMessage(error, 'No se pudo guardar en la base de datos.');
     }
   }
 
@@ -190,6 +191,62 @@ export class App implements OnInit {
       month: 'short',
       year: 'numeric',
     }).format(new Date(date));
+  }
+
+  private async loadEntries(): Promise<void> {
+    this.isLoadingEntries = true;
+    try {
+      this.entries = await this.multimediaApi.listEntries();
+      this.entriesErrorMessage = '';
+    } catch (error) {
+      this.entriesErrorMessage = this.getApiErrorMessage(
+        error,
+        'No se pudieron cargar las entradas desde la API.',
+      );
+      this.entries = [];
+    } finally {
+      this.isLoadingEntries = false;
+      this.syncDashboardState();
+    }
+  }
+
+  private getApiErrorMessage(error: unknown, fallback: string): string {
+    if (error instanceof HttpErrorResponse) {
+      if (typeof error.error?.message === 'string' && error.error.message.trim().length > 0) {
+        return error.error.message;
+      }
+      return error.message || fallback;
+    }
+
+    if (error instanceof Error && error.message.trim().length > 0) {
+      return error.message;
+    }
+
+    return fallback;
+  }
+
+  private syncDashboardState(latestNewEntry?: DiaryEntry): void {
+    this.syncSummaryMonthSelection();
+    this.moodBoard = this.buildMoodBoard(this.entries);
+
+    if (!latestNewEntry) {
+      this.refreshLatestMovie();
+      this.refreshLatestSeries();
+      this.refreshLatestAnime();
+      return;
+    }
+
+    if (latestNewEntry.type === 'Pelicula') {
+      this.refreshLatestMovie();
+      return;
+    }
+
+    if (latestNewEntry.type === 'Serie') {
+      this.refreshLatestSeries();
+      return;
+    }
+
+    this.refreshLatestAnime();
   }
 
   private refreshLatestMovie(): void {

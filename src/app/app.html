@@ -1,5 +1,11 @@
 <main class="page">
   <app-topbar></app-topbar>
+  @if (isLoadingEntries) {
+    <p class="lead">Cargando entradas desde la base de datos...</p>
+  }
+  @if (entriesErrorMessage) {
+    <p class="lead">Error de API: {{ entriesErrorMessage }}</p>
+  }
 
   <section class="hero">
     <div class="hero-copy">
