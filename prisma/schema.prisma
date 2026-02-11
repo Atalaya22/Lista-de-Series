@@ -15,7 +15,6 @@ model Multimedia {
   place  String   @map("lugar") @db.VarChar(50)
   mood   String   @db.VarChar(50)
   notes  String?  @map("anotacion") @db.VarChar(255)
-  date   DateTime @map("fecha") @db.Date
 
   @@map("multimedia")
 }

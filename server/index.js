@@ -48,19 +48,6 @@ function toDiaryEntry(row) {
   };
 }
 
-function parseSafeDate(dateValue) {
-  if (typeof dateValue !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-    return null;
-  }
-
-  const parsedDate = new Date(`${dateValue}T00:00:00.000Z`);
-  if (Number.isNaN(parsedDate.getTime())) {
-    return null;
-  }
-
-  return parsedDate;
-}
-
 async function ensureSchema() {
   await prisma.$connect();
 }
@@ -86,7 +73,7 @@ app.get('/api/multimedia', async (_req, res) => {
 });
 
 app.post('/api/multimedia', async (req, res) => {
-  const { title, type, rating, place, mood, notes, date } = req.body || {};
+  const { title, type, rating, place, mood, notes } = req.body || {};
 
   if (!title || typeof title !== 'string') {
     return res.status(400).json({ message: 'El campo title es obligatorio.' });
@@ -99,8 +86,6 @@ app.post('/api/multimedia', async (req, res) => {
     typeof place === 'string' && place.trim().length > 0 ? place.trim() : 'Sin lugar';
   const safeMood = typeof mood === 'string' && mood.trim().length > 0 ? mood.trim() : 'Pendiente';
   const safeNotes = typeof notes === 'string' ? notes.trim() : '';
-  const safeDate = parseSafeDate(date);
-
   try {
     const createdEntry = await prisma.multimedia.create({
       data: {
@@ -110,7 +95,6 @@ app.post('/api/multimedia', async (req, res) => {
         place: safePlace,
         mood: safeMood,
         notes: safeNotes || null,
-        date: safeDate || new Date(),
       },
     });
 
