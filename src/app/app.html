@@ -1,5 +1,5 @@
 <main class="page">
-  <app-topbar></app-topbar>
+  <app-topbar [activeView]="activeView" (viewChanged)="setActiveView($event)"></app-topbar>
   @if (isLoadingEntries) {
     <p class="lead">Cargando entradas desde la base de datos...</p>
   }
@@ -7,61 +7,71 @@
     <p class="lead">Error de API: {{ entriesErrorMessage }}</p>
   }
 
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Actualidad</p>
-      <h1>Tu memoria audiovisual, ordenada por emociones.</h1>
-      <p class="lead">
-        Guarda lo que ves, como te hizo sentir y por que vale la pena recordarlo. Un diario intimo
-        para volver a tus escenas favoritas.
-      </p>
-      <div class="quick-stats">
-        <div class="stat-card">
-          <p class="stat-value">{{ moviesCount }}</p>
-          <p class="stat-label">Peliculas vistas</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-value">{{ seriesCount }}</p>
-          <p class="stat-label">Series seguidas</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-value">{{ averageRating.toFixed(1) }}</p>
-          <p class="stat-label">Promedio personal</p>
+  @if (activeView === 'diario') {
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Actualidad</p>
+        <h1>Tu memoria audiovisual, ordenada por emociones.</h1>
+        <p class="lead">
+          Guarda lo que ves, como te hizo sentir y por que vale la pena recordarlo. Un diario intimo
+          para volver a tus escenas favoritas.
+        </p>
+        <div class="quick-stats">
+          <div class="stat-card">
+            <p class="stat-value">{{ moviesCount }}</p>
+            <p class="stat-label">Peliculas vistas</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">{{ seriesCount }}</p>
+            <p class="stat-label">Series seguidas</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">{{ averageRating.toFixed(1) }}</p>
+            <p class="stat-label">Promedio personal</p>
+          </div>
         </div>
       </div>
-    </div>
-    <app-quick-entry-form
-      (entrySaved)="addEntry($event)"
-      (pendingSaved)="addPendingItem($event)"
-    ></app-quick-entry-form>
-  </section>
+      <app-quick-entry-form
+        (entrySaved)="addEntry($event)"
+        (pendingSaved)="addPendingItem($event)"
+      ></app-quick-entry-form>
+    </section>
 
-  @if (entries.length > 0) {
-    <app-dashboard-grid
-      [entries]="entries"
-      [latestMovie]="latestMovie"
-      [latestMoviePosterUrl]="latestMoviePosterUrl"
-      [latestMoviePosterAlt]="latestMoviePosterAlt"
-      [latestMoviePosterState]="latestMoviePosterState"
-      [latestMoviePosterMessage]="latestMoviePosterMessage"
-      [latestSeries]="latestSeries"
-      [latestSeriesPosterUrl]="latestSeriesPosterUrl"
-      [latestSeriesPosterAlt]="latestSeriesPosterAlt"
-      [latestSeriesPosterState]="latestSeriesPosterState"
-      [latestSeriesPosterMessage]="latestSeriesPosterMessage"
-      [latestAnime]="latestAnime"
-      [latestAnimePosterUrl]="latestAnimePosterUrl"
-      [latestAnimePosterAlt]="latestAnimePosterAlt"
-      [latestAnimePosterState]="latestAnimePosterState"
-      [latestAnimePosterMessage]="latestAnimePosterMessage"
-      [highlights]="highlights"
-      [moodBoard]="moodBoard"
-      [pendingItems]="pendingItems"
-      [monthOptions]="summaryMonthOptions"
-      [selectedMonth]="selectedSummaryMonth"
-      (monthSelected)="setSummaryMonth($event)"
-      (pendingDiscarded)="discardPendingItem($event)"
-    ></app-dashboard-grid>
+    @if (entries.length > 0) {
+      <app-dashboard-grid
+        [entries]="entries"
+        [latestMovie]="latestMovie"
+        [latestMoviePosterUrl]="latestMoviePosterUrl"
+        [latestMoviePosterAlt]="latestMoviePosterAlt"
+        [latestMoviePosterState]="latestMoviePosterState"
+        [latestMoviePosterMessage]="latestMoviePosterMessage"
+        [latestSeries]="latestSeries"
+        [latestSeriesPosterUrl]="latestSeriesPosterUrl"
+        [latestSeriesPosterAlt]="latestSeriesPosterAlt"
+        [latestSeriesPosterState]="latestSeriesPosterState"
+        [latestSeriesPosterMessage]="latestSeriesPosterMessage"
+        [latestAnime]="latestAnime"
+        [latestAnimePosterUrl]="latestAnimePosterUrl"
+        [latestAnimePosterAlt]="latestAnimePosterAlt"
+        [latestAnimePosterState]="latestAnimePosterState"
+        [latestAnimePosterMessage]="latestAnimePosterMessage"
+        [highlights]="highlights"
+        [moodBoard]="moodBoard"
+        [pendingItems]="pendingItems"
+        [monthOptions]="summaryMonthOptions"
+        [selectedMonth]="selectedSummaryMonth"
+        (monthSelected)="setSummaryMonth($event)"
+        (pendingDiscarded)="discardPendingItem($event)"
+      ></app-dashboard-grid>
+    }
+  } @else {
+    <section class="stats-view">
+      <div class="stats-head">
+        <p class="eyebrow">Estadisticas</p>
+        <h1>Peliculas vistas esta ultima semana</h1>
+      </div>
+      <app-weekly-movies-chart [entries]="entries"></app-weekly-movies-chart>
+    </section>
   }
 </main>
 

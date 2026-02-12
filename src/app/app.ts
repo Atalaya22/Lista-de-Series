@@ -7,6 +7,8 @@ import { QuickEntryFormComponent } from './quick-entry-form/quick-entry-form.com
 import { TopbarComponent } from './topbar/topbar.component';
 import { DashboardGridComponent } from './dashboard-grid/dashboard-grid.component';
 import { MultimediaApiService } from './services/multimedia-api.service';
+import { TopbarView } from './topbar/topbar.component';
+import { WeeklyMoviesChartComponent } from './weekly-movies-chart/weekly-movies-chart.component';
 
 interface Highlight {
   label: string;
@@ -21,11 +23,13 @@ interface Highlight {
     QuickEntryFormComponent,
     TopbarComponent,
     DashboardGridComponent,
+    WeeklyMoviesChartComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App implements OnInit {
+  activeView: TopbarView = 'diario';
   private summaryMonthKey: string | null = null;
   isLoadingEntries = false;
   entriesErrorMessage = '';
@@ -183,6 +187,10 @@ export class App implements OnInit {
 
   setSummaryMonth(monthKey: string): void {
     this.summaryMonthKey = monthKey;
+  }
+
+  setActiveView(view: TopbarView): void {
+    this.activeView = view;
   }
 
   formatEntryDate(date: string): string {

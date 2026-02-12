@@ -107,6 +107,19 @@
   font-size: 0.9rem;
 }
 
+.stats-view {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 980px;
+}
+
+.stats-head h1 {
+  margin: 8px 0 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

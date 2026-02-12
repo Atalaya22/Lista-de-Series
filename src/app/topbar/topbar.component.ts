@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+export type TopbarView = 'diario' | 'estadisticas';
 
 @Component({
   selector: 'app-topbar',
@@ -6,4 +8,11 @@ import { Component } from '@angular/core';
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.css',
 })
-export class TopbarComponent {}
+export class TopbarComponent {
+  @Input() activeView: TopbarView = 'diario';
+  @Output() viewChanged = new EventEmitter<TopbarView>();
+
+  selectView(view: TopbarView): void {
+    this.viewChanged.emit(view);
+  }
+}

@@ -7,9 +7,23 @@
     </div>
   </div>
   <nav class="nav">
-    <button class="nav-pill active">Diario</button>
-    <button class="nav-pill">Estadisticas</button>
-    <button class="nav-pill">Listas</button>
-    <button class="nav-pill ghost">Exportar</button>
+    <button
+      class="nav-pill"
+      [class.active]="activeView === 'diario'"
+      type="button"
+      (click)="selectView('diario')"
+    >
+      Diario
+    </button>
+    <button
+      class="nav-pill"
+      [class.active]="activeView === 'estadisticas'"
+      type="button"
+      (click)="selectView('estadisticas')"
+    >
+      Estadisticas
+    </button>
+    <button class="nav-pill" type="button">Listas</button>
+    <button class="nav-pill ghost" type="button">Exportar</button>
   </nav>
 </header>
