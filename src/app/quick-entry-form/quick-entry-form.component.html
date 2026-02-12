@@ -5,11 +5,14 @@
       <p class="panel-subtitle">Hoy, {{ todayLabel }}</p>
     </div>
   </div>
+
+  <!-- Formulario de captura rapida de entradas -->
   <form class="panel-body" (ngSubmit)="saveEntry()">
     <div class="field">
       <label>Titulo</label>
       <input name="title" [(ngModel)]="title" placeholder="Ej: The Holdovers" />
     </div>
+
     <div class="field-row">
       <div class="field">
         <label>Tipo</label>
@@ -24,6 +27,7 @@
         <input name="rating" [(ngModel)]="rating" placeholder="0-5" />
       </div>
     </div>
+
     <div class="field">
       <label>Nota rapida</label>
       <textarea
@@ -34,6 +38,7 @@
         style="resize: none"
       ></textarea>
     </div>
+
     <div class="field">
       <label>Lugar</label>
       <select name="place" [(ngModel)]="place">
@@ -42,6 +47,7 @@
         }
       </select>
     </div>
+
     <div class="field-row">
       <div class="field">
         <label>Mood</label>
@@ -56,10 +62,13 @@
         <input name="tags" [(ngModel)]="tags" placeholder="Ej: Intima, Emocional, Lenta" />
       </div>
     </div>
+
+    <!-- Si se marca, no se guarda en BD y va a lista local de pendientes -->
     <label class="toggle">
       <input type="checkbox" name="isPending" [(ngModel)]="isPending" />
       Marcar como pendiente
     </label>
+
     <button class="primary full" type="submit">Guardar entrada</button>
   </form>
 </div>

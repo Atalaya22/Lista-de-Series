@@ -1,4 +1,7 @@
+<!-- Encabezado del bloque de historial -->
 <app-section-header title="Ultimos registros" actionLabel="Ver todo"></app-section-header>
+
+<!-- Lista de tarjetas de entrada -->
 <div class="entries">
   @for (entry of entries; track entry.id) {
     <app-entry-card [entry]="entry"></app-entry-card>

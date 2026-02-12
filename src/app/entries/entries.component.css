@@ -1,3 +1,4 @@
+/* Lista vertical de tarjetas de entrada */
 .entries {
   display: grid;
   gap: 16px;

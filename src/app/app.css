@@ -3,6 +3,7 @@
   color: #11121a;
 }
 
+/* Layout general de la pagina */
 .page {
   min-height: 100vh;
   padding: 32px clamp(16px, 4vw, 56px) 72px;
@@ -11,6 +12,7 @@
   gap: 40px;
 }
 
+/* Hero principal (copy + formulario rapido) */
 .hero {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -35,7 +37,7 @@
 }
 
 .hero h1 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(2rem, 3.5vw, 3.5rem);
   margin: 0;
 }
@@ -46,6 +48,7 @@
   max-width: 40ch;
 }
 
+/* Botones base reutilizados en varias vistas */
 .hero-actions {
   display: flex;
   gap: 12px;
@@ -57,7 +60,7 @@
 .ghost {
   border-radius: 14px;
   padding: 12px 18px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -80,6 +83,7 @@
   color: #11121a;
 }
 
+/* Tarjetas de estadisticas rapidas */
 .quick-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -96,7 +100,7 @@
 }
 
 .stat-value {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.6rem;
   margin: 0 0 4px;
 }
@@ -107,6 +111,7 @@
   font-size: 0.9rem;
 }
 
+/* Contenedor de la vista de estadisticas */
 .stats-view {
   display: flex;
   flex-direction: column;
@@ -116,10 +121,11 @@
 
 .stats-head h1 {
   margin: 8px 0 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(1.4rem, 2.6vw, 2.1rem);
 }
 
+/* Animacion de entrada vertical */
 @keyframes fade-up {
   from {
     opacity: 0;

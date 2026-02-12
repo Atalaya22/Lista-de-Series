@@ -1,4 +1,5 @@
 <article class="entry-card">
+  <!-- Encabezado con titulo, metadata y rating -->
   <div class="entry-header">
     <div>
       <p class="entry-title">{{ entry.title }}</p>
@@ -8,15 +9,21 @@
     </div>
     <div class="entry-rating">{{ entry.rating }}</div>
   </div>
+
+  <!-- Notas y contexto de visualizacion -->
   <p class="entry-notes">{{ entry.notes }}</p>
   @if (entry.place) {
     <p class="entry-notes">Lugar: {{ entry.place }}</p>
   }
+
+  <!-- Etiquetas libres definidas por el usuario -->
   <div class="entry-tags">
     @for (tag of entry.tags; track tag) {
       <span>{{ tag }}</span>
     }
   </div>
+
+  <!-- Estado emocional asociado a la entrada -->
   <div class="entry-footer">
     <span class="mood">{{ entry.mood }}</span>
   </div>

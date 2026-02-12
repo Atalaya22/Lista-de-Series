@@ -11,9 +11,12 @@ import { PendingListItem } from '../pending-list/pending-list.component';
   styleUrl: './quick-entry-form.component.css',
 })
 export class QuickEntryFormComponent {
+  // Evento cuando la entrada va al backend.
   @Output() entrySaved = new EventEmitter<DiaryEntry>();
+  // Evento cuando se guarda como "pendiente" local.
   @Output() pendingSaved = new EventEmitter<PendingListItem>();
 
+  // Catlogos para selects del formulario.
   readonly moodOptions: string[] = [
     'Euforica',
     'Feliz',
@@ -33,6 +36,7 @@ export class QuickEntryFormComponent {
     'Otro',
   ];
 
+  // Estado de campos del formulario.
   title: string = '';
   type: DiaryEntry['type'] = 'Pelicula';
   rating: string = '';
@@ -42,12 +46,14 @@ export class QuickEntryFormComponent {
   tags: string = '';
   isPending: boolean = false;
 
+  // Fecha actual ya formateada para mostrar en el encabezado.
   readonly todayLabel: string = new Intl.DateTimeFormat('es-ES', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
   }).format(new Date());
 
+  // Construye y emite una entrada nueva (persistida o pendiente).
   saveEntry(): void {
     const title = this.title.trim();
     const notes = this.notes.trim();
@@ -91,6 +97,8 @@ export class QuickEntryFormComponent {
     this.entrySaved.emit(entry);
     this.resetForm();
   }
+
+  // Limpia el formulario para una nueva captura.
   private resetForm(): void {
     this.title = '';
     this.type = 'Pelicula';

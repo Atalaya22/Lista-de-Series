@@ -1,3 +1,4 @@
+/* Tarjeta oscura del formulario de entrada rapida */
 .hero-panel {
   background: #12131d;
   color: #fdf7f2;
@@ -18,7 +19,7 @@
 }
 
 .panel-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.1rem;
   margin: 0;
 }
@@ -35,6 +36,7 @@
   font-size: 0.8rem;
 }
 
+/* Distribucion vertical de campos */
 .panel-body {
   display: flex;
   flex-direction: column;
@@ -60,9 +62,10 @@
   background: rgba(255, 255, 255, 0.08);
   color: #fdf7f2;
   padding: 10px 12px;
-  font-family: "Libre Franklin", sans-serif;
+  font-family: 'Libre Franklin', sans-serif;
 }
 
+/* Filas de dos columnas en ancho suficiente */
 .field-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -85,6 +88,7 @@
   width: 100%;
 }
 
+/* Animacion de entrada para el panel */
 @keyframes float-in {
   from {
     opacity: 0;

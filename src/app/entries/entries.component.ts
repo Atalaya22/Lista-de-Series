@@ -10,5 +10,6 @@ import { DiaryEntry, EntryCardComponent } from './entry-card/entry-card.componen
   styleUrl: './entries.component.css',
 })
 export class EntriesComponent {
+  // Entradas que se listan en tarjetas individuales.
   @Input({ required: true }) entries: DiaryEntry[] = [];
 }

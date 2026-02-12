@@ -1,4 +1,5 @@
 <section class="grid">
+  <!-- Columna principal: ultimos contenidos + listado de entradas -->
   <div class="column">
     <section class="latest-movie-card">
       <div class="latest-movie-text">
@@ -17,6 +18,8 @@
           <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
         }
       </div>
+
+      <!-- Poster de pelicula con estados: loading, error, listo, vacio -->
       <div class="latest-movie-poster">
         @if (latestMoviePosterState === 'loading') {
           <div class="poster-placeholder">Cargando caratula...</div>
@@ -31,6 +34,8 @@
         }
       </div>
     </section>
+
+    <!-- Fila secundaria con ultima serie y ultimo anime -->
     <section class="latest-tv-row">
       <section class="latest-movie-card latest-tv-card">
         <div class="latest-movie-text">
@@ -53,6 +58,7 @@
             <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
           }
         </div>
+
         <div class="latest-movie-poster">
           @if (latestSeriesPosterState === 'loading') {
             <div class="poster-placeholder">Cargando caratula...</div>
@@ -89,6 +95,7 @@
             <p class="latest-movie-meta">Agrega una entrada para ver la caratula.</p>
           }
         </div>
+
         <div class="latest-movie-poster">
           @if (latestAnimePosterState === 'loading') {
             <div class="poster-placeholder">Cargando caratula...</div>
@@ -104,9 +111,12 @@
         </div>
       </section>
     </section>
+
+    <!-- Historial de entradas -->
     <app-entries [entries]="entries"></app-entries>
   </div>
 
+  <!-- Columna lateral: resumen mensual, emociones y pendientes -->
   <aside class="column side">
     <app-section-header
       title="Resumen del mes"

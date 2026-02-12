@@ -10,6 +10,7 @@ import { MultimediaApiService } from './services/multimedia-api.service';
 import { TopbarView } from './topbar/topbar.component';
 import { WeeklyMoviesChartComponent } from './weekly-movies-chart/weekly-movies-chart.component';
 
+// Estructura visual que consume el componente de highlights (resumen del mes).
 interface Highlight {
   label: string;
   value: string;
@@ -29,13 +30,18 @@ interface Highlight {
   styleUrl: './app.css',
 })
 export class App implements OnInit {
+  // Vista activa del topbar: diario o estadisticas.
   activeView: TopbarView = 'diario';
+  // Mes seleccionado para calcular resumenes; si es null, se toma el mes por defecto.
   private summaryMonthKey: string | null = null;
+  // Flags de estado para peticiones a la API.
   isLoadingEntries = false;
   entriesErrorMessage = '';
 
+  // Lista principal de entradas guardadas en la base de datos.
   entries: DiaryEntry[] = [];
 
+  // Calcula el resumen visual del mes (items vistos, animo dominante y lugar favorito).
   get highlights(): Highlight[] {
     if (this.entries.length === 0) {
       return [
@@ -104,44 +110,59 @@ export class App implements OnInit {
     ];
   }
 
+  // Nube de emociones calculada a partir de todas las entradas.
   moodBoard: string[] = this.buildMoodBoard(this.entries);
 
+  // Lista local para "pendientes" sin persistencia en backend.
   pendingItems: PendingListItem[] = [];
 
+  // Estado de la ultima pelicula y su caratula.
   latestMovie: DiaryEntry | null = null;
   latestMoviePosterUrl: string | null = null;
   latestMoviePosterAlt: string = '';
   latestMoviePosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
   latestMoviePosterMessage: string = '';
+
+  // Estado de la ultima serie y su caratula.
   latestSeries: DiaryEntry | null = null;
   latestSeriesPosterUrl: string | null = null;
   latestSeriesPosterAlt: string = '';
   latestSeriesPosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
   latestSeriesPosterMessage: string = '';
+
+  // Estado del ultimo anime y su caratula.
   latestAnime: DiaryEntry | null = null;
   latestAnimePosterUrl: string | null = null;
   latestAnimePosterAlt: string = '';
   latestAnimePosterState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
   latestAnimePosterMessage: string = '';
+
+  // Controladores para cancelar requests de caratulas en curso cuando cambia el contenido.
   private moviePosterController?: AbortController;
   private seriesPosterController?: AbortController;
   private animePosterController?: AbortController;
+
+  // Cache en memoria para no volver a consultar posters de titulos ya resueltos.
   private posterCache = new Map<string, { url: string; alt: string }>();
 
   constructor(private readonly multimediaApi: MultimediaApiService) {}
 
+  // Hook de inicio: carga entradas desde backend al montar el componente raiz.
   ngOnInit(): void {
     void this.loadEntries();
   }
 
+  // Conteo rapido de peliculas.
   get moviesCount(): number {
     return this.entries.filter((entry) => entry.type === 'Pelicula').length;
   }
 
+  // Conteo rapido de series.
   get seriesCount(): number {
     return this.entries.filter((entry) => entry.type === 'Serie').length;
   }
 
+  // Promedio general de calificaciones.
   get averageRating(): number {
     if (this.entries.length === 0) {
       return 0;
@@ -150,6 +171,7 @@ export class App implements OnInit {
     return total / this.entries.length;
   }
 
+  // Opciones de mes para el selector de resumen (enero-diciembre del anio activo).
   get summaryMonthOptions(): Array<{ value: string; label: string }> {
     const year = this.getSummaryYear();
     const formatter = new Intl.DateTimeFormat('es-ES', { month: 'long' });
@@ -162,10 +184,12 @@ export class App implements OnInit {
     });
   }
 
+  // Clave de mes actualmente seleccionada para mostrar resumen.
   get selectedSummaryMonth(): string {
     return this.summaryMonthKey ?? this.summaryMonthOptions[0]?.value ?? '';
   }
 
+  // Guarda una nueva entrada en API y sincroniza el estado del dashboard.
   async addEntry(entry: DiaryEntry): Promise<void> {
     try {
       const createdEntry = await this.multimediaApi.createEntry(entry);
@@ -177,22 +201,27 @@ export class App implements OnInit {
     }
   }
 
+  // Agrega un item pendiente a la lista local.
   addPendingItem(item: PendingListItem): void {
     this.pendingItems = [item, ...this.pendingItems];
   }
 
+  // Elimina un pendiente por su indice.
   discardPendingItem(index: number): void {
     this.pendingItems = this.pendingItems.filter((_, itemIndex) => itemIndex !== index);
   }
 
+  // Cambia el mes seleccionado para resumen.
   setSummaryMonth(monthKey: string): void {
     this.summaryMonthKey = monthKey;
   }
 
+  // Cambia la pestaña activa del topbar.
   setActiveView(view: TopbarView): void {
     this.activeView = view;
   }
 
+  // Formatea fechas para mostrar en UI.
   formatEntryDate(date: string): string {
     return new Intl.DateTimeFormat('es-ES', {
       day: '2-digit',
@@ -201,6 +230,7 @@ export class App implements OnInit {
     }).format(new Date(date));
   }
 
+  // Carga inicial de entradas desde API.
   private async loadEntries(): Promise<void> {
     this.isLoadingEntries = true;
     try {
@@ -218,6 +248,7 @@ export class App implements OnInit {
     }
   }
 
+  // Normaliza cualquier error de API a un mensaje legible para la interfaz.
   private getApiErrorMessage(error: unknown, fallback: string): string {
     if (error instanceof HttpErrorResponse) {
       if (typeof error.error?.message === 'string' && error.error.message.trim().length > 0) {
@@ -233,6 +264,7 @@ export class App implements OnInit {
     return fallback;
   }
 
+  // Recalcula widgets del dashboard y refresca posteres del ultimo contenido por tipo.
   private syncDashboardState(latestNewEntry?: DiaryEntry): void {
     this.syncSummaryMonthSelection();
     this.moodBoard = this.buildMoodBoard(this.entries);
@@ -257,6 +289,7 @@ export class App implements OnInit {
     this.refreshLatestAnime();
   }
 
+  // Refresca la tarjeta de ultima pelicula.
   private refreshLatestMovie(): void {
     this.latestMovie = this.getLatestMovie();
     this.latestMoviePosterUrl = null;
@@ -271,6 +304,7 @@ export class App implements OnInit {
     this.fetchLatestMoviePoster(this.latestMovie);
   }
 
+  // Refresca la tarjeta de ultima serie.
   private refreshLatestSeries(): void {
     this.latestSeries = this.getLatestEntryByType('Serie');
     this.latestSeriesPosterUrl = null;
@@ -285,6 +319,7 @@ export class App implements OnInit {
     this.fetchLatestSeriesPoster(this.latestSeries);
   }
 
+  // Refresca la tarjeta de ultimo anime.
   private refreshLatestAnime(): void {
     this.latestAnime = this.getLatestEntryByType('Anime');
     this.latestAnimePosterUrl = null;
@@ -299,10 +334,12 @@ export class App implements OnInit {
     this.fetchLatestAnimePoster(this.latestAnime);
   }
 
+  // Wrapper para mantener compatibilidad semantica cuando se busca la ultima pelicula.
   private getLatestMovie(): DiaryEntry | null {
     return this.getLatestEntryByType('Pelicula');
   }
 
+  // Devuelve la entrada mas reciente para el tipo indicado.
   private getLatestEntryByType(type: DiaryEntry['type']): DiaryEntry | null {
     const matches = this.entries.filter((entry) => entry.type === type);
     if (matches.length === 0) {
@@ -314,6 +351,7 @@ export class App implements OnInit {
     }, matches[0]);
   }
 
+  // Genera lista de emociones con porcentaje para el panel "Mapa de emociones".
   private buildMoodBoard(entries: DiaryEntry[]): string[] {
     if (entries.length === 0) {
       return [];
@@ -329,6 +367,7 @@ export class App implements OnInit {
       .map(([mood, count]) => `${mood} ${Math.round((count / entries.length) * 100)}%`);
   }
 
+  // Toma el anio de la entrada mas reciente para construir opciones del selector mensual.
   private getSummaryYear(): number {
     if (this.entries.length === 0) {
       return new Date().getFullYear();
@@ -340,6 +379,7 @@ export class App implements OnInit {
     return new Date(latestEntry.date).getFullYear();
   }
 
+  // Asegura que siempre haya un mes valido seleccionado al refrescar datos.
   private syncSummaryMonthSelection(): void {
     const monthKeys = this.summaryMonthOptions.map((option) => option.value);
     if (monthKeys.length === 0) {
@@ -352,6 +392,7 @@ export class App implements OnInit {
     }
   }
 
+  // Busca y prepara poster de la ultima pelicula.
   private async fetchLatestMoviePoster(entry: DiaryEntry): Promise<void> {
     this.moviePosterController?.abort();
     this.moviePosterController = new AbortController();
@@ -372,6 +413,7 @@ export class App implements OnInit {
     }
   }
 
+  // Busca y prepara poster de la ultima serie.
   private async fetchLatestSeriesPoster(entry: DiaryEntry): Promise<void> {
     this.seriesPosterController?.abort();
     this.seriesPosterController = new AbortController();
@@ -396,6 +438,7 @@ export class App implements OnInit {
     }
   }
 
+  // Busca y prepara poster del ultimo anime.
   private async fetchLatestAnimePoster(entry: DiaryEntry): Promise<void> {
     this.animePosterController?.abort();
     this.animePosterController = new AbortController();
@@ -420,6 +463,7 @@ export class App implements OnInit {
     }
   }
 
+  // Resuelve una caratula consultando imdbapi.dev y cachea el resultado.
   private async resolvePoster(
     entry: DiaryEntry,
     preferredTypes: string[],

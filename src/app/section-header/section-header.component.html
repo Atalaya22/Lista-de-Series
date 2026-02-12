@@ -1,6 +1,9 @@
+<!-- Encabezado reutilizable de cada modulo -->
 <div class="section-header">
   <h2>{{ title }}</h2>
 </div>
+
+<!-- Select de mes opcional para secciones que necesitan filtro temporal -->
 @if (monthOptions.length > 0) {
   <div class="month-dropdown">
     <label for="month-select" class="month-dropdown-label">Selecciona un mes</label>

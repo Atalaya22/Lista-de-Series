@@ -3,11 +3,13 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { PrismaClient } = require('@prisma/client');
 
+// Carga variables de entorno desde .env.
 dotenv.config();
 
 const app = express();
 const apiPort = Number(process.env.API_PORT || 3000);
 
+// Construye URL de BD usando DATABASE_URL o variables PG* por separado.
 function buildDatabaseUrl() {
   if (process.env.DATABASE_URL) {
     return process.env.DATABASE_URL;
@@ -22,15 +24,18 @@ function buildDatabaseUrl() {
   return `postgresql://${user}:${password}@${host}:${port}/${database}?schema=public`;
 }
 
+// Cliente Prisma conectado a PostgreSQL.
 const prisma = new PrismaClient({
   datasources: {
     db: { url: buildDatabaseUrl() },
   },
 });
 
+// Middlewares globales.
 app.use(cors());
 app.use(express.json());
 
+// Normaliza una fila de BD al formato de DiaryEntry esperado por Angular.
 function toDiaryEntry(row) {
   const normalizedType =
     row.type === 'Serie' || row.type === 'Anime' || row.type === 'Pelicula' ? row.type : 'Pelicula';
@@ -48,10 +53,12 @@ function toDiaryEntry(row) {
   };
 }
 
+// Valida conexion inicial a la BD.
 async function ensureSchema() {
   await prisma.$connect();
 }
 
+// Endpoint de salud para verificar API + DB.
 app.get('/api/health', async (_req, res) => {
   try {
     const result = await prisma.$queryRaw`SELECT NOW() AS now`;
@@ -61,6 +68,7 @@ app.get('/api/health', async (_req, res) => {
   }
 });
 
+// Lista entradas multimedia ordenadas por id descendente (mas reciente primero).
 app.get('/api/multimedia', async (_req, res) => {
   try {
     const entries = await prisma.multimedia.findMany({
@@ -72,6 +80,7 @@ app.get('/api/multimedia', async (_req, res) => {
   }
 });
 
+// Crea una nueva entrada multimedia con validaciones basicas.
 app.post('/api/multimedia', async (req, res) => {
   const { title, type, rating, place, mood, notes } = req.body || {};
 
@@ -86,6 +95,7 @@ app.post('/api/multimedia', async (req, res) => {
     typeof place === 'string' && place.trim().length > 0 ? place.trim() : 'Sin lugar';
   const safeMood = typeof mood === 'string' && mood.trim().length > 0 ? mood.trim() : 'Pendiente';
   const safeNotes = typeof notes === 'string' ? notes.trim() : '';
+
   try {
     const createdEntry = await prisma.multimedia.create({
       data: {
@@ -104,6 +114,7 @@ app.post('/api/multimedia', async (req, res) => {
   }
 });
 
+// Arranque del servidor despues de confirmar conexion con BD.
 ensureSchema()
   .then(() => {
     app.listen(apiPort, () => {
@@ -115,6 +126,7 @@ ensureSchema()
     process.exit(1);
   });
 
+// Cierre elegante para no dejar conexiones Prisma abiertas.
 process.on('SIGINT', async () => {
   await prisma.$disconnect();
   process.exit(0);

@@ -1,3 +1,4 @@
+/* Tarjeta contenedora de la grafica semanal */
 .statistics-card {
   padding: 16px;
   border-radius: 18px;
@@ -28,6 +29,7 @@
   font-size: 0.9rem;
 }
 
+/* Zona donde se inyecta el SVG/canvas de Plotly */
 .chart {
   width: 100%;
   min-height: 220px;

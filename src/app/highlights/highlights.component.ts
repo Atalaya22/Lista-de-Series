@@ -7,5 +7,6 @@ import { Component, Input } from '@angular/core';
   styleUrl: './highlights.component.css',
 })
 export class HighlightsComponent {
+  // Tarjetas de resumen mensual a renderizar.
   @Input({ required: true }) items: { label: string; value: string; hint: string }[] = [];
 }

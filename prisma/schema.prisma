@@ -1,12 +1,15 @@
+// Genera el cliente Prisma para consumir la base de datos desde Node.js.
 generator client {
   provider = "prisma-client-js"
 }
 
+// Conexion a PostgreSQL usando DATABASE_URL del entorno.
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// Tabla principal donde se guardan las entradas multimedia.
 model Multimedia {
   id     Int      @id @default(autoincrement())
   title  String   @map("nombre") @db.VarChar(100)
@@ -16,5 +19,6 @@ model Multimedia {
   mood   String   @db.VarChar(50)
   notes  String?  @map("anotacion") @db.VarChar(255)
 
+  // Nombre real de la tabla en la BD.
   @@map("multimedia")
 }

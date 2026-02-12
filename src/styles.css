@@ -1,5 +1,6 @@
+/* Tema global base de tipografia y colores */
 :root {
-  font-family: "Libre Franklin", sans-serif;
+  font-family: 'Libre Franklin', sans-serif;
   color: #11121a;
   background-color: #f7f2ec;
 }
@@ -8,6 +9,7 @@
   box-sizing: border-box;
 }
 
+/* Fondo general con gradientes suaves */
 body {
   margin: 0;
   background: radial-gradient(circle at top left, #fef1d6 0%, rgba(254, 241, 214, 0) 55%),
@@ -17,6 +19,7 @@ body {
   min-height: 100vh;
 }
 
+/* Inputs y botones heredan la fuente principal */
 button,
 input,
 select,

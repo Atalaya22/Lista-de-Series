@@ -1,3 +1,4 @@
+/* Tarjeta individual de entrada */
 .entry-card {
   background: rgba(255, 255, 255, 0.72);
   border-radius: 20px;
@@ -18,7 +19,7 @@
 }
 
 .entry-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.2rem;
   margin: 0;
 }
@@ -29,8 +30,9 @@
   font-size: 0.9rem;
 }
 
+/* Badge de calificacion */
 .entry-rating {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.2rem;
   background: #11121a;
   color: #fdf7f2;
@@ -43,6 +45,7 @@
   color: #2f3142;
 }
 
+/* Etiquetas libres de la entrada */
 .entry-tags {
   display: flex;
   flex-wrap: wrap;

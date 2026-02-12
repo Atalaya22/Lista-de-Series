@@ -1,5 +1,8 @@
 <main class="page">
+  <!-- Barra superior para cambiar entre vista Diario y Estadisticas -->
   <app-topbar [activeView]="activeView" (viewChanged)="setActiveView($event)"></app-topbar>
+
+  <!-- Estados globales de carga y error cuando se consulta la API -->
   @if (isLoadingEntries) {
     <p class="lead">Cargando entradas desde la base de datos...</p>
   }
@@ -7,6 +10,7 @@
     <p class="lead">Error de API: {{ entriesErrorMessage }}</p>
   }
 
+  <!-- Vista principal del diario -->
   @if (activeView === 'diario') {
     <section class="hero">
       <div class="hero-copy">
@@ -16,6 +20,8 @@
           Guarda lo que ves, como te hizo sentir y por que vale la pena recordarlo. Un diario intimo
           para volver a tus escenas favoritas.
         </p>
+
+        <!-- Resumen rapido de metricas del diario -->
         <div class="quick-stats">
           <div class="stat-card">
             <p class="stat-value">{{ moviesCount }}</p>
@@ -31,12 +37,15 @@
           </div>
         </div>
       </div>
+
+      <!-- Formulario rapido de captura -->
       <app-quick-entry-form
         (entrySaved)="addEntry($event)"
         (pendingSaved)="addPendingItem($event)"
       ></app-quick-entry-form>
     </section>
 
+    <!-- Grid principal con ultimos contenidos + resumen lateral -->
     @if (entries.length > 0) {
       <app-dashboard-grid
         [entries]="entries"
@@ -65,6 +74,7 @@
       ></app-dashboard-grid>
     }
   } @else {
+    <!-- Vista alterna de estadisticas semanales -->
     <section class="stats-view">
       <div class="stats-head">
         <p class="eyebrow">Estadisticas</p>
@@ -75,4 +85,5 @@
   }
 </main>
 
+<!-- Outlet disponible por si luego se agregan rutas -->
 <router-outlet />
