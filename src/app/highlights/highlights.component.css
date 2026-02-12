@@ -1,32 +1,32 @@
-/* Contenedor de tarjetas resumen */
 .highlights {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
 .highlight {
-  background: #11121a;
-  color: #fdf7f2;
-  padding: 18px;
-  border-radius: 18px;
+  background: linear-gradient(165deg, #f6f9ff 0%, #edf4ff 100%);
+  border: 1px solid rgba(0, 113, 227, 0.2);
+  color: #0f2138;
+  padding: 16px;
+  border-radius: var(--apple-radius-md);
+  box-shadow: var(--apple-shadow-sm);
 }
 
 .highlight-label {
   margin: 0;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  color: rgba(15, 33, 56, 0.62);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
 }
 
 .highlight-value {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.32rem;
   margin: 8px 0 4px;
 }
 
 .highlight-hint {
   margin: 0;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.84rem;
+  color: rgba(15, 33, 56, 0.65);
 }

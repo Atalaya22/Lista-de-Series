@@ -1,22 +1,20 @@
 :host {
   display: block;
-  color: #11121a;
+  color: var(--apple-text-primary);
 }
 
-/* Layout general de la pagina */
 .page {
   min-height: 100vh;
-  padding: 32px clamp(16px, 4vw, 56px) 72px;
+  padding: 34px clamp(16px, 4vw, 58px) 72px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 38px;
 }
 
-/* Hero principal (copy + formulario rapido) */
 .hero {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
   align-items: stretch;
 }
 
@@ -24,31 +22,32 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  animation: fade-up 0.6s ease both;
+  animation: fade-up 0.5s ease both;
 }
 
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: 3px;
-  font-size: 0.72rem;
-  color: #7b4fff;
+  letter-spacing: 0.16em;
+  font-size: 0.68rem;
+  color: var(--apple-accent);
   font-weight: 600;
   margin: 0;
 }
 
 .hero h1 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  font-size: clamp(2rem, 3.2vw, 3.15rem);
   margin: 0;
+  line-height: 1.05;
+  max-width: 18ch;
 }
 
 .lead {
-  font-size: 1.1rem;
-  color: #3f4158;
-  max-width: 40ch;
+  font-size: 1.02rem;
+  color: var(--apple-text-secondary);
+  max-width: 44ch;
+  margin: 0;
 }
 
-/* Botones base reutilizados en varias vistas */
 .hero-actions {
   display: flex;
   gap: 12px;
@@ -58,78 +57,75 @@
 .primary,
 .secondary,
 .ghost {
-  border-radius: 14px;
-  padding: 12px 18px;
-  font-family: 'Space Grotesk', sans-serif;
+  border-radius: 999px;
+  padding: 11px 18px;
   font-weight: 600;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
 }
 
 .primary {
-  background: #11121a;
-  color: #fdf7f2;
-  box-shadow: 0 12px 30px rgba(17, 18, 26, 0.3);
+  background: var(--apple-accent);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 113, 227, 0.34);
 }
 
 .secondary {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(17, 18, 26, 0.15);
+  background: var(--apple-surface-strong);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-primary);
 }
 
 .ghost {
   background: transparent;
-  border: 1px solid rgba(17, 18, 26, 0.2);
-  color: #11121a;
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-primary);
 }
 
-/* Tarjetas de estadisticas rapidas */
 .quick-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 18px;
+  background: var(--apple-surface);
+  border-radius: var(--apple-radius-md);
   padding: 16px;
-  border: 1px solid rgba(17, 18, 26, 0.08);
-  box-shadow: 0 12px 24px rgba(17, 18, 26, 0.08);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-shadow-sm);
+  backdrop-filter: var(--apple-blur);
+  -webkit-backdrop-filter: var(--apple-blur);
 }
 
 .stat-value {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.52rem;
   margin: 0 0 4px;
 }
 
 .stat-label {
   margin: 0;
-  color: #4c4f67;
-  font-size: 0.9rem;
+  color: var(--apple-text-secondary);
+  font-size: 0.86rem;
 }
 
-/* Contenedor de la vista de estadisticas */
 .stats-view {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   max-width: 980px;
 }
 
 .stats-head h1 {
   margin: 8px 0 0;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-size: clamp(1.34rem, 2.5vw, 2rem);
 }
 
-/* Animacion de entrada vertical */
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;

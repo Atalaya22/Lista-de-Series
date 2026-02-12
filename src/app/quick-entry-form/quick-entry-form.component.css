@@ -1,14 +1,16 @@
-/* Tarjeta oscura del formulario de entrada rapida */
 .hero-panel {
-  background: #12131d;
-  color: #fdf7f2;
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 18px 40px rgba(9, 10, 20, 0.35);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(247, 250, 255, 0.88));
+  color: var(--apple-text-primary);
+  border-radius: var(--apple-radius-xl);
+  border: 1px solid var(--apple-border);
+  padding: 22px;
+  box-shadow: var(--apple-shadow-md);
   display: flex;
   flex-direction: column;
   gap: 20px;
-  animation: float-in 0.7s ease both;
+  animation: float-in 0.6s ease both;
+  backdrop-filter: var(--apple-blur);
+  -webkit-backdrop-filter: var(--apple-blur);
 }
 
 .panel-header {
@@ -19,24 +21,23 @@
 }
 
 .panel-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   margin: 0;
 }
 
 .panel-subtitle {
   margin: 6px 0 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--apple-text-secondary);
 }
 
 .panel-chip {
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--apple-accent-soft);
+  color: #005bb5;
   font-size: 0.8rem;
 }
 
-/* Distribucion vertical de campos */
 .panel-body {
   display: flex;
   flex-direction: column;
@@ -50,22 +51,20 @@
 }
 
 .field label {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.83rem;
+  color: var(--apple-text-secondary);
 }
 
 .field input,
 .field select,
 .field textarea {
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fdf7f2;
+  border-radius: var(--apple-radius-sm);
+  border: 1px solid var(--apple-border);
+  background: var(--apple-bg-elevated);
+  color: var(--apple-text-primary);
   padding: 10px 12px;
-  font-family: 'Libre Franklin', sans-serif;
 }
 
-/* Filas de dos columnas en ancho suficiente */
 .field-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -77,22 +76,32 @@
   align-items: center;
   gap: 10px;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--apple-text-secondary);
 }
 
 .toggle input {
-  accent-color: #fdf7f2;
+  accent-color: var(--apple-accent);
 }
 
 .full {
   width: 100%;
 }
 
-/* Animacion de entrada para el panel */
+.primary {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: var(--apple-accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 113, 227, 0.34);
+}
+
 @keyframes float-in {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.98);
+    transform: translateY(20px) scale(0.985);
   }
   to {
     opacity: 1;

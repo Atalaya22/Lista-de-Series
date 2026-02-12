@@ -1,14 +1,15 @@
-/* Tarjeta individual de entrada */
 .entry-card {
-  background: rgba(255, 255, 255, 0.72);
-  border-radius: 20px;
+  background: var(--apple-surface);
+  border-radius: var(--apple-radius-lg);
   padding: 18px;
-  border: 1px solid rgba(17, 18, 26, 0.08);
-  box-shadow: 0 16px 30px rgba(17, 18, 26, 0.08);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-shadow-sm);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  animation: fade-up 0.6s ease both;
+  animation: fade-up 0.5s ease both;
+  backdrop-filter: var(--apple-blur);
+  -webkit-backdrop-filter: var(--apple-blur);
 }
 
 .entry-header {
@@ -19,33 +20,31 @@
 }
 
 .entry-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.16rem;
   margin: 0;
 }
 
 .entry-meta {
   margin: 6px 0 0;
-  color: #4c4f67;
-  font-size: 0.9rem;
+  color: var(--apple-text-secondary);
+  font-size: 0.88rem;
 }
 
-/* Badge de calificacion */
 .entry-rating {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.2rem;
-  background: #11121a;
-  color: #fdf7f2;
+  font-size: 1.05rem;
+  background: var(--apple-accent);
+  color: #fff;
   padding: 6px 12px;
   border-radius: 12px;
+  min-width: 48px;
+  text-align: center;
 }
 
 .entry-notes {
   margin: 0;
-  color: #2f3142;
+  color: var(--apple-text-primary);
 }
 
-/* Etiquetas libres de la entrada */
 .entry-tags {
   display: flex;
   flex-wrap: wrap;
@@ -55,8 +54,8 @@
 .entry-tags span {
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(123, 79, 255, 0.12);
-  color: #5d35e0;
+  background: var(--apple-accent-soft);
+  color: #005bb5;
   font-size: 0.8rem;
 }
 
@@ -68,5 +67,5 @@
 
 .mood {
   font-weight: 600;
-  color: #7b4fff;
+  color: var(--apple-accent);
 }

@@ -1,28 +1,80 @@
-/* Tema global base de tipografia y colores */
 :root {
-  font-family: 'Libre Franklin', sans-serif;
-  color: #11121a;
-  background-color: #f7f2ec;
+  --apple-font: 'SF Pro Text', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --apple-text-primary: #1d1d1f;
+  --apple-text-secondary: #6e6e73;
+  --apple-text-tertiary: #8e8e93;
+  --apple-accent: #0071e3;
+  --apple-accent-soft: rgba(0, 113, 227, 0.12);
+  --apple-bg: #f5f5f7;
+  --apple-bg-elevated: #fbfbfd;
+  --apple-surface: rgba(255, 255, 255, 0.78);
+  --apple-surface-strong: rgba(255, 255, 255, 0.9);
+  --apple-border: rgba(29, 29, 31, 0.08);
+  --apple-shadow-sm: 0 8px 20px rgba(12, 18, 28, 0.07);
+  --apple-shadow-md: 0 16px 36px rgba(12, 18, 28, 0.09);
+  --apple-shadow-lg: 0 24px 54px rgba(12, 18, 28, 0.12);
+  --apple-radius-sm: 12px;
+  --apple-radius-md: 16px;
+  --apple-radius-lg: 22px;
+  --apple-radius-xl: 28px;
+  --apple-blur: blur(20px);
+  --apple-chart-bar: #0071e3;
+  --apple-chart-bar-line: #005bb5;
+  --apple-chart-grid: rgba(29, 29, 31, 0.1);
+
+  font-family: var(--apple-font);
+  color: var(--apple-text-primary);
+  background-color: var(--apple-bg);
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* Fondo general con gradientes suaves */
 body {
   margin: 0;
-  background: radial-gradient(circle at top left, #fef1d6 0%, rgba(254, 241, 214, 0) 55%),
-    radial-gradient(circle at 20% 20%, #e5f1ff 0%, rgba(229, 241, 255, 0) 60%),
-    radial-gradient(circle at 80% 10%, #efe5ff 0%, rgba(239, 229, 255, 0) 45%),
-    #f7f2ec;
   min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 6%, rgba(194, 220, 255, 0.45), transparent 42%),
+    radial-gradient(circle at 90% 18%, rgba(219, 234, 255, 0.52), transparent 40%),
+    linear-gradient(180deg, #fbfbfd 0%, var(--apple-bg) 62%, #eff1f4 100%);
+  color: var(--apple-text-primary);
+  font-family: var(--apple-font);
 }
 
-/* Inputs y botones heredan la fuente principal */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--apple-font);
+  letter-spacing: -0.02em;
+}
+
 button,
 input,
 select,
 textarea {
   font-family: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: rgba(0, 113, 227, 0.55);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.18);
+}
+
+::selection {
+  background: rgba(0, 113, 227, 0.24);
 }

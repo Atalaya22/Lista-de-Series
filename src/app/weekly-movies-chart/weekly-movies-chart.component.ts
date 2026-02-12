@@ -10,6 +10,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { DiaryEntry } from '../entries/entry-card/entry-card.component';
+import {
+  APPLE_CHART_CONFIG,
+  createAppleBarTrace,
+  createAppleChartLayout,
+} from '../shared/apple-chart-theme';
 
 // Punto temporal para cada dia de la semana en la grafica.
 interface WeeklyPoint {
@@ -99,44 +104,17 @@ export class WeeklyMoviesChartComponent implements AfterViewInit, OnChanges, OnD
 
     const weekDays = this.getLastWeekDays();
     const weekMovieCounts = this.getLastWeekMovieCounts();
-    const trace = {
-      type: 'bar',
-      x: weekDays.map((day) => day.label),
-      y: weekMovieCounts,
-      marker: {
-        color: '#fd7e14',
-        line: {
-          color: '#dc5f00',
-          width: 1.2,
-        },
-      },
-      hovertemplate: '%{x}<br>%{y} pelicula(s)<extra></extra>',
-    };
-    const layout = {
-      margin: { t: 12, r: 12, b: 36, l: 36 },
-      paper_bgcolor: 'transparent',
-      plot_bgcolor: 'transparent',
-      yaxis: {
-        title: 'Vistas',
-        tick0: 0,
-        dtick: 1,
-        rangemode: 'tozero',
-        gridcolor: 'rgba(17, 18, 26, 0.12)',
-      },
-      xaxis: {
-        tickangle: -30,
-      },
-      font: {
-        family: 'Manrope, sans-serif',
-        color: '#2f334b',
-      },
-    };
-    const config = {
-      displayModeBar: false,
-      responsive: true,
-    };
+    const trace = createAppleBarTrace(
+      weekDays.map((day) => day.label),
+      weekMovieCounts,
+      'pelicula(s)',
+    );
+    const layout = createAppleChartLayout({
+      title: 'Vistas',
+      xTickAngle: -30,
+    });
 
-    await plotly.newPlot(chartElement, [trace], layout, config);
+    await plotly.newPlot(chartElement, [trace], layout, APPLE_CHART_CONFIG);
   }
 
   // Cuenta cuantas peliculas se registraron por cada dia de los ultimos 7 dias.

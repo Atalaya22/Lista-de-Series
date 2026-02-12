@@ -1,35 +1,34 @@
-/* Tarjeta contenedora de la grafica semanal */
 .statistics-card {
   padding: 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(17, 18, 26, 0.08);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 238, 224, 0.88));
-  box-shadow: 0 10px 20px rgba(17, 18, 26, 0.08);
+  border-radius: var(--apple-radius-lg);
+  border: 1px solid var(--apple-border);
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-md);
+  backdrop-filter: var(--apple-blur);
+  -webkit-backdrop-filter: var(--apple-blur);
 }
 
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 2.8px;
+  letter-spacing: 0.15em;
   font-size: 0.68rem;
-  color: #ff7f2a;
+  color: var(--apple-accent);
   font-weight: 700;
 }
 
 .title {
   margin: 10px 0 0;
-  font-size: 1.05rem;
-  color: #1c2238;
-  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.04rem;
+  color: var(--apple-text-primary);
 }
 
 .subtitle {
   margin: 8px 0 12px;
-  color: #505778;
+  color: var(--apple-text-secondary);
   font-size: 0.9rem;
 }
 
-/* Zona donde se inyecta el SVG/canvas de Plotly */
 .chart {
   width: 100%;
   min-height: 220px;
